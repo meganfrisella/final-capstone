@@ -1,7 +1,6 @@
 import numpy as np
 from microphone import record_audio
 import librosa
-from sklearn.metrics.pairwise import cosine_similarity
 import pickle
 
 
@@ -23,7 +22,6 @@ def recording_to_sample(duration=5):
     """
     frames, sample_rate = record_audio(duration)
     audio_data = np.hstack([np.frombuffer(i, np.int16) for i in frames])
-    print(audio_data.shape)
 
     return audio_data
 
@@ -82,15 +80,15 @@ def sample_to_freqs(sample, num_freqs=100):
 
 
 def find_match(freq, cutoff=0.5):
-    f = open("database.p", "rb")
+    f = open("people.p", "rb")
     people = pickle.load(f)
     f.close()
 
+    freq = np.array(freq)/np.linalg.norm(freq)
+
     for profile in people.values():
         mean_freq = profile.mean_freq
-        similarity = cosine_similarity(freq, mean_freq)
+        mean_freq = np.array(mean_freq)/np.linalg.norm(mean_freq)
 
-        if similarity > cutoff:
-            return profile.name
-
-    return "Unknown"
+        similarity = np.dot(freq, mean_freq)
+        print(profile.name, similarity)

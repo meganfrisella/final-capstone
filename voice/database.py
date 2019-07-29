@@ -56,6 +56,6 @@ def add_profile(num_recordings=5):
 
     people[name] = Profile(name, freqs)
 
-    f = open('people.p', 'wb')d
+    f = open('people.p', 'wb')
     pickle.dump(people, f)
     f.close()
