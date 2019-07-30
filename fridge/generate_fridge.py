@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import PIL.Image
-%matplotlib inline
+#%matplotlib inline
 
 
 def propose_regions(image, threshold=0.1):
@@ -69,7 +69,7 @@ def layer_image(background, roi_image, image, shift=(0, 0)):
 def parse_food():
 
 
-    rgba_pil = PIL.Image.open('fridge/food.png')
+    rgba_pil = PIL.Image.open('food.png')
     img = np.array(rgba_pil.convert('RGB'))
 
     row_step = 1200 // 15
@@ -98,7 +98,7 @@ def generate_fridge(num_items):
         for pos in right:
             shift_ls.append([(shelf, pos)])
 
-    fridge = mpimg.imread('fridge/fridge.jpg')
+    fridge = mpimg.imread('fridge.jpg')
     fridge = np.array(fridge)
 
     for i in range(num_items):
@@ -107,3 +107,6 @@ def generate_fridge(num_items):
         shift = shift_ls.pop(np.random.randint(0, len(shift_ls)))  #random shift & deletes option from list
         fridge = layer_image(fridge, roi_images[i], images[i], shift[0])
     plt.imshow(fridge)
+    plt.show()
+
+generate_fridge(25)
