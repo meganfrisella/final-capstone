@@ -1,4 +1,3 @@
-ROW 1
 dessert
 juice
 pie
@@ -15,8 +14,6 @@ dish
 seafood
 drink
 dish
-
-ROW 2
 dessert
 candy
 dish
@@ -33,8 +30,6 @@ seafood
 dish
 dish
 dish
-
-ROW 3
 grain
 pie
 grain
@@ -51,8 +46,6 @@ dessert
 dessert
 dish
 vegetable
-
-ROW 4
 vegetable
 grain
 dish
@@ -69,8 +62,6 @@ cheese
 dessert
 candy
 dish
-
-ROW 5
 meat
 nonmeat protein
 dish
@@ -87,8 +78,8 @@ juice
 vegetable
 meat
 vegetable
-
-ROW 6
+dish
+dish
 dessert
 drink
 fruit
@@ -103,8 +94,6 @@ fruit
 dessert
 grain
 seafood
-
-ROW 7
 dish
 drink
 nonmeat protein
@@ -121,8 +110,6 @@ fruit
 fruit
 meat
 grain
-
-ROW 8
 dessert
 dessert
 drink
@@ -139,8 +126,6 @@ fruit
 dish
 cheese
 meat
-
-ROW 9
 fruit
 dish
 dish
@@ -157,8 +142,6 @@ vegetable
 grain
 fruit
 vegetable
-
-ROW 10
 drink
 drink
 honey
@@ -175,8 +158,6 @@ vegetable
 nonmeat protein
 drink
 drink
-
-ROW 11
 dessert
 dish
 meat
@@ -193,8 +174,6 @@ dish
 dessert
 dish
 dish
-
-ROW 12
 dish
 drink
 dessert
@@ -211,8 +190,6 @@ dessert
 drink
 dish
 seafood
-
-ROW 13
 pie
 dessert
 grain
@@ -229,8 +206,6 @@ pie
 dessert
 drink
 dish
-
-ROW 14
 dish
 dish
 drink
@@ -247,8 +222,6 @@ vegetable
 seafood
 vegetable
 water
-
-ROW 15
 seafood
 dessert
 grain
@@ -257,27 +230,3 @@ meat
 dessert
 dish
 candy
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
