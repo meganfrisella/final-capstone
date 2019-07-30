@@ -89,6 +89,8 @@ meat
 vegetable
 
 ROW 6
+dish
+dish
 dessert
 drink
 fruit
@@ -257,27 +259,3 @@ meat
 dessert
 dish
 candy
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
