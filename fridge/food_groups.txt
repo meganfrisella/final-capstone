@@ -1,0 +1,260 @@
+ROW 1
+dairy, junk
+fruit
+fruit, grain
+fruit
+seafood
+fruit
+grain
+seafood
+junk
+meat
+dairy, fruit
+vegetable
+vegetable
+seafood
+dairy
+meat
+
+ROW 2
+grain, junk
+junk
+dairy
+vegetable, dairy
+grain, fruit, junk
+fruit
+grain
+drink
+drink
+vegetable
+grain
+fruit
+seafood
+vegetable
+vegetable, meat, grain
+grain
+
+ROW 3
+grain, fruit, junk
+grain
+fruit
+water
+seafood
+meat
+meat
+meat
+dairy, junk
+meat, vegetable, grain
+grain, seafood, vegetable
+dairy, junk
+dairy, junk
+seafood
+vegetable
+
+ROW 4
+vegetable
+grain
+meat
+fruit
+meat, grain
+meat, grain, junk
+meat
+grain, junk
+grain
+fruit
+grain, junk
+dairy, junk
+dairy
+grain
+junk
+grain
+
+ROW 5
+meat
+nonmeat protein
+grain
+fruit
+nonmeat protein
+fruit
+grain
+vegetable
+nonmeat protein
+grain
+fruit
+meat
+fruit
+nonmeat protein
+meat
+vegetable
+
+ROW 6
+seafood
+grain
+junk
+drink
+fruit
+grain, dairy
+grain, junk
+dairy, junk
+fruit
+meat, grain
+junk
+meat
+fruit
+grain, junk
+grain
+seafood
+
+ROW 7
+seafood, rice
+drink
+nonmeat protein
+fruit
+grain
+grain
+meat
+vegetable
+seafood
+grain
+grain
+grain, dairy, junk
+fruit, junk
+fruit
+meat
+grain
+
+ROW 8
+dairy, junk
+junk
+drink
+grain
+grain, junk
+grain
+dairy
+fruit
+vegetable
+nonmeat protein
+vegetable
+fruit
+fruit
+meat, grain, junk
+dairy
+meat
+
+ROW 9
+fruit
+seafood
+seafood
+vegetable
+seafood
+vegetable
+meat
+vegetable
+seafood
+vegetable
+vegetable, sefaood
+grain
+vegetable
+grain, junk
+fruit
+vegetable
+
+ROW 10
+drink
+drink
+drink
+grain, meat
+drink
+vegetable
+grain
+meat, grain
+meat
+meat
+grain
+grain
+vegetable
+nonmeat protein
+drink
+drink
+
+ROW 11
+grain, junk
+seafood
+meat
+seafood
+junk
+grain, dairy
+grain, dairy
+grain, junk
+grain
+meat, junk
+grain, junk
+grain, junk
+grain
+grain, junk
+dairy
+grain
+
+ROW 12
+meat, junk
+drink
+grain
+grain
+grain, junk
+grain, dairy
+vegetable, junk
+grain, fruit
+fruit, junk
+vegetable
+nonmeat protein
+grain, dairy
+fruit, junk
+drink
+meat
+seafood
+
+ROW 13
+fruit, junk
+grain, meat
+grain, junk
+dairy, junk
+dairy, junk
+grain
+junk
+dairy, junk
+vegetable, junk
+grain, dairy
+dairy, junk
+grain
+grain, junk
+dairy, grain, junk
+drink
+grain
+
+ROW 14
+meat, vegetable, grain, junk
+grain
+drink
+vegetable
+vegetable
+dairy, junk
+grain
+grain, vegetable, meat
+dairy, junk
+grain
+seafood
+grain, nonmeat protein
+vegetable
+seafood
+vegetable
+water
+
+ROW 15
+seafood
+junk
+grain
+grain
+meat
+grain, dairy, junk
+vegetable, vegetable
+junk

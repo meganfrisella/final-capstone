@@ -28,6 +28,7 @@ with open('food_labels_raw.txt', mode="r") as var:
     all_labels = var.read().splitlines()
     distinct_labels = list(set(all_labels))
 encodings = one_hot(distinct_labels, all_labels)
+
 print(distinct_labels)
 print(encodings.shape)
 print(encodings[0])

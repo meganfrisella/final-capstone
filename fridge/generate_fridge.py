@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import PIL.Image
 #%matplotlib inline
+import generate_labels
 
 
 def propose_regions(image, threshold=0.1):
@@ -76,7 +77,12 @@ def parse_food():
     col_step = 1280 // 16
 
     images = [] #list of each image's rgb arrays
-    labels = [] #list of each image's label
+
+    #creates one hot encodings for each image
+    with open('food_labels_raw.txt', mode="r") as var:
+        all_labels = var.read().splitlines()
+        distinct_labels = list(set(all_labels))
+    encodings = one_hot(distinct_labels, all_labels)
 
     for i in range(0, 1200, row_step):
         for j in range(0, 1280, col_step):
@@ -86,7 +92,7 @@ def parse_food():
     # list of each regionized image where 1 indicates object and 0 indicates background
     roi_images = np.array([propose_regions(i) for i in images])
 
-    return images, roi_images, labels
+    return images, roi_images, encodings
 
 
 def generate_fridge(num_items):
