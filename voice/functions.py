@@ -2,9 +2,11 @@ import numpy as np
 from microphone import record_audio
 import librosa
 import pickle
+import train
+import matplotlib.pyplot as plt
 
 
-def recording_to_sample(duration=5):
+def recording_to_sample(duration=3):
     """
     Records audio and converts it to a list of samples with
     a sampling rate of 44100Hz
@@ -43,11 +45,10 @@ def mp3_to_samples(path, duration=4):
 
     """
     samples, fs = librosa.load(path, sr=44100, mono=True, duration=duration)
-    samples *= 2**15
     return samples
 
 
-def sample_to_freqs(sample, num_freqs=100):
+def sample_to_desc(sample, cutoff=0.9999, bin_size=12):
     """
     Generates a list of top frequencies for
     a given sample of audio.
@@ -57,38 +58,59 @@ def sample_to_freqs(sample, num_freqs=100):
     sample, np.ndarray
         an audio sample
 
-    num_freqs, int
-        the number of top frequencies to be included
+    cutoff, np.float
+        the percent of coefficients to filter out
 
     Returns
     -------
-    list, len=num_freqs
-        the top frequencies in the sample
+    np.ndarray
+        an array of amplitudes for corresponding k-values
 
     """
-    c = np.abs(np.fft.rfft(sample))
-
     N = len(sample)
     L = N / 44100
-    k = np.arange(N // 2 + 1)
-    freqs = np.round(k / L, 3)
+    c = np.abs(np.fft.rfft(sample))
 
-    coef_freq = list(zip(c, freqs))
-    top_n = sorted(coef_freq)[-num_freqs:]
+    c = c[:-1]
 
-    return [freq for coef, freq in top_n]
+    min_amp = np.sort(c)[int(cutoff*len(c))]
+
+    new_c = np.copy(c)
+    new_c[c < min_amp] = 0
+
+    new_c = new_c.reshape((int(len(new_c)/bin_size), -1))
+    new_c = np.mean(new_c, axis=1).reshape(new_c.shape[0])
+
+    new_c = new_c / np.linalg.norm(new_c)
+    """
+    fig, ax = plt.subplots()
+    ax.plot(new_c)
+    ax.set_xlim(0, 250)
+    """
+
+    # k = np.arange(N//2+1)
+    # freq = k / L
+
+    return new_c
 
 
-def find_match(freq, cutoff=0.5):
+def find_match(desc, cutoff=0.5):
+    desc = desc / np.linalg.norm(desc)
+
     f = open("people.p", "rb")
     people = pickle.load(f)
     f.close()
 
-    freq = np.array(freq)/np.linalg.norm(freq)
-
+    matches = []
     for profile in people.values():
-        mean_freq = profile.mean_freq
-        mean_freq = np.array(mean_freq)/np.linalg.norm(mean_freq)
+        mean_desc = profile.mean_desc
+        mean_desc = mean_desc / np.linalg.norm(mean_desc)
+        similarity = np.dot(desc, mean_desc)
+        matches.append((profile.name, similarity))
 
-        similarity = np.dot(freq, mean_freq)
-        print(profile.name, similarity)
+    matches = sorted(matches, key=lambda item: item[1])
+    return matches[-3:]
+
+
+def get_embedding(sample):
+    return train.model(sample).data
