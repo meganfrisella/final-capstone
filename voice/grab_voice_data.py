@@ -2,6 +2,8 @@ import pickle
 import numpy as np
 from torch import tensor
 
+empty = []
+
 def grab_voice_data():
     '''
     grabs voice data from voice_data.p
