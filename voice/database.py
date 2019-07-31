@@ -29,6 +29,15 @@ class Profile:
         return "{} ∆ {}".format(self.name, len(self.descs))
 
 
+class EncoderProfile:
+    def __init__(self, name, mean_emb):
+        self.name = name
+        self.mean_desc = mean_emb
+
+    def __repr__(self):
+        return self.name
+
+
 def add_phrase_profile(num_recordings=5):
     """
     Creates a profile for a new person and adds it to the database. A specified
@@ -91,22 +100,55 @@ def add_encoder_profile(num_recordings=5):
     """
     name = input("What is your name (First Last)? ")
 
-    print("We will take 5 four-second recordings of your voice. Please speak consistently for the"
+    print("We will take 5 five-second recordings of your voice. Please speak consistently for the "
           "entire time.")
 
     ans = input("Hit 'Enter' when ready")
 
-    embeddings = []
-    for num in range(num_recordings):
-        sample = functions.recording_to_sample(duration=4)
-        emb = functions.get_embedding(sample)
-        embeddings.append(emb)
+    samples = np.zeros((num_recordings, 176400))
+
+    for i in range(num_recordings):
+        sample = functions.recording_to_sample(duration=5)
+        samples[i] = sample[:176400]
+
+    mean_emb = np.mean(functions.get_embedding(samples), axis=0)
+    mean_emb /= np.linalg.norm(mean_emb)
 
     f = open("encoder.p", "rb")
     people = pickle.load(f)
     f.close()
 
-    people[name] = Profile(name, embeddings)
+    people[name] = EncoderProfile(name, mean_emb)
+
+    f = open('encoder.p', 'wb')
+    pickle.dump(people, f)
+    f.close()
+
+
+def add_encoder_profile_debug(samples, name):
+    """
+    Creates a profile for a new person and adds it to the database. A specified
+    number of 5-second recordings are taken, during which the person should
+    be speaking into the microphone.
+
+    Parameters
+    ----------
+    num_recordings, np.int
+        the number of recordings taken
+
+    Returns
+    -------
+
+    """
+
+    mean_emb = np.mean(functions.get_embedding(samples), axis=0)
+    mean_emb /= np.linalg.norm(mean_emb)
+
+    f = open("encoder.p", "rb")
+    people = pickle.load(f)
+    f.close()
+
+    people[name] = EncoderProfile(name, mean_emb)
 
     f = open('encoder.p', 'wb')
     pickle.dump(people, f)

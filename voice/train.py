@@ -5,7 +5,7 @@ import autoencoder
 from mynn.optimizers.adam import Adam
 from mygrad.nnet import margin_ranking_loss
 import mygrad as mg
-# from noggin import create_plot
+from noggin import create_plot
 
 database = get_voice_data.grab_voice_data()
 
@@ -13,16 +13,15 @@ sample_duration = 4  # seconds
 sampling_rate = 44100  # Hz
 sample_length = sample_duration * sampling_rate
 
-model = autoencoder.Autoencoder(sample_length, 50)
+model = autoencoder.Autoencoder(sample_length, 100)
 optim = Adam(model.parameters)
 
-batch_size = 10
+batch_size = 15
 
-# plotter, fig, ax = create_plot(metrics=["loss", "accuracy"])
+plotter, fig, ax = create_plot(metrics=["loss", "accuracy"])
 
 if __name__ == "__main__":
-
-    for epoch_cnt in range(50):
+    for epoch_cnt in range(75):
 
         batch = np.zeros((batch_size, 3, sample_length))
         for i in range(batch_size):
@@ -50,8 +49,8 @@ if __name__ == "__main__":
         optim.step()
         loss.null_gradients()
 
-        """
+        # """
         plotter.set_train_batch({"loss": loss.item(),
                                  "accuracy": acc},
                                 batch_size=1)
-        """
+        # """

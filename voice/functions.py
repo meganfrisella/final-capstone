@@ -5,6 +5,10 @@ import pickle
 import train
 import matplotlib.pyplot as plt
 
+f = open("model.p", "rb")
+model = pickle.load(f)
+f.close()
+
 
 def recording_to_sample(duration=3):
     """
@@ -28,7 +32,7 @@ def recording_to_sample(duration=3):
     return audio_data
 
 
-def mp3_to_samples(path, duration=4):
+def mp3_to_sample(path, duration=4):
     """
     Converts an mp3 file to a list of samples with
     a sampling rate of 44100Hz
@@ -37,6 +41,9 @@ def mp3_to_samples(path, duration=4):
     ----------
     path, string
         path to an mp3 file
+
+    duration, int
+        duration of sample, in seconds
 
     Returns
     -------
@@ -94,7 +101,7 @@ def sample_to_desc(sample, cutoff=0.9999, bin_size=12):
     return new_c
 
 
-def find_match(desc, cutoff=0.5):
+def find_phrase_match(desc, cutoff=0.5):
     desc = desc / np.linalg.norm(desc)
 
     f = open("people.p", "rb")
@@ -112,5 +119,23 @@ def find_match(desc, cutoff=0.5):
     return matches[-3:]
 
 
+def find_encoder_match(emb, cutoff=0.5):
+
+    f = open("encoder.p", "rb")
+    people = pickle.load(f)
+    f.close()
+
+    matches = []
+    for profile in people.values():
+        mean_emb = profile.mean_desc
+        similarity = np.dot(emb, mean_emb)
+        matches.append((profile.name, similarity))
+        print(profile.name, similarity)
+
+    matches = sorted(matches, key=lambda item: item[1])
+    return matches[-3:]
+
+
 def get_embedding(sample):
-    return train.model(sample).data
+    return model(sample).data
+

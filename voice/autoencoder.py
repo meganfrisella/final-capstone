@@ -16,9 +16,9 @@ class Autoencoder:
         d_embed : int
             dimension of the embedding
         """
-        self.dense1 = dense(d_data, 200, weight_initializer=normal)
-        self.dense2 = dense(200, 100, weight_initializer=normal)
-        self.dense3 = dense(100, d_embed, weight_initializer=normal)
+        self.dense1 = dense(d_data, 1000, weight_initializer=normal)
+        self.dense2 = dense(1000, 500, weight_initializer=normal)
+        self.dense3 = dense(500, d_embed, weight_initializer=normal)
 
     def __call__(self, x):
         """
