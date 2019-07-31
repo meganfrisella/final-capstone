@@ -26,7 +26,7 @@ def recording_to_sample(duration=5):
     return audio_data
 
 
-def mp3_to_samples(path):
+def mp3_to_samples(path, duration=4):
     """
     Converts an mp3 file to a list of samples with
     a sampling rate of 44100Hz
@@ -42,7 +42,7 @@ def mp3_to_samples(path):
         list of samples (voltages) from audio recording
 
     """
-    samples, fs = librosa.load(path, sr=44100, mono=True)
+    samples, fs = librosa.load(path, sr=44100, mono=True, duration=duration)
     samples *= 2**15
     return samples
 

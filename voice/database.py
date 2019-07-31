@@ -3,11 +3,19 @@ import numpy as np
 import functions
 
 
-def initialize_database():
-    people = {}
-    f = open('people.p', 'wb')
-    pickle.dump(people, f)
-    f.close()
+def initialize_database(type):
+
+    if type is 'phrase':
+        people = {}
+        f = open('people.p', 'wb')
+        pickle.dump(people, f)
+        f.close()
+
+    elif type is 'embed':
+        emb_ppl = {}
+        f = open('embed_people.p', 'wb')
+        pickle.dump(emb_ppl, f)
+        f.close()
 
 
 class Profile:
@@ -27,7 +35,7 @@ class Profile:
         f.close()
 
 
-def add_profile(num_recordings=5):
+def add_phrase_profile(num_recordings=5):
     """
     Creates a profile for a new person and adds it to the database. A specified
     number of 5-second recordings are taken, during which the person should
@@ -47,7 +55,7 @@ def add_profile(num_recordings=5):
     freqs = []
     for num in range(num_recordings):
         print(f"Starting audio sample {num+1}.")
-        sample = functions.recording_to_sample()
+        sample = functions.recording_to_sample(duration=3)
         freqs.append(functions.sample_to_freqs(sample))
 
     f = open("people.p", "rb")
@@ -59,3 +67,6 @@ def add_profile(num_recordings=5):
     f = open('people.p', 'wb')
     pickle.dump(people, f)
     f.close()
+
+def add_embed_profile(num_recordings=5):
+
