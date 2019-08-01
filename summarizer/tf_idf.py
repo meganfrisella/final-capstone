@@ -52,16 +52,14 @@ def to_vocab(counters, k=None, stop_words=None):
     stop_words : Optional[Collection[str]]
         A collection of words to be ignored when populating the vocabulary
     """
-    unique = Counter()
-    for c in counters:
-        unique.update(c)
+    vocab = Counter()
+    for counter in counters:
+        vocab.update(counter)
+
     if stop_words is not None:
-        for word in stop_words:
-            del unique[word]
-    if k is not None:
-        unique = set(unique.most_common(k))
-        return sorted(list(unique))
-    return sorted(list(unique))
+        for word in set(stop_words):
+            vocab.pop(word, None)  # if word not in bag, return None
+    return sorted(i for i, j in vocab.most_common(k))
 
 
 def to_tf(counter, vocab):
@@ -79,17 +77,8 @@ def to_tf(counter, vocab):
         The TF descriptor for the document, whose components represent
         the frequency with which each term in the vocab occurs
         in the given document."""
-    total = 0.0
-    for key in counter:
-        if key in vocab:
-            total += counter[key]
-    tf = []
-    for word in vocab:
-        if counter[word] is None:
-            tf.append(0)
-        else:
-            tf.append(1.0 * counter[word] / total)
-    return np.array(tf)
+    x = np.array([counter[word] for word in vocab], dtype=float)
+    return x / x.sum()
 
 
 def to_idf(vocab, counters):
@@ -114,13 +103,7 @@ def to_idf(vocab, counters):
         Where `N` is the number of documents, and `nt` is the number of
         documents in which the term `t` occurs.
     """
-    N = 1.0 * len(counters)
-    idf = []
-    for i in range(len(vocab)):
-        word = vocab[i]
-        docs = 0.0
-        for countmap in counters:
-            if word in countmap:
-                docs += 1.0
-        idf.append(N / docs)
-    return np.array(np.log10(idf))
+    N = len(counters)
+    nt = [sum(1 if t in counter else 0 for counter in counters) for t in vocab]
+    nt = np.array(nt, dtype=float)
+    return np.log10(N / nt)

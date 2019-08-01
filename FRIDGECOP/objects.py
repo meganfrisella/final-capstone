@@ -1,8 +1,5 @@
 import numpy as np
-import pickle
-from generate_fridge import layer_image
-from generate_fridge import propose_regions
-from generate_fridge import parse_food
+from update_fridge import remove_item, layer_image, propose_regions, parse_food
 
 class Person: 
     '''Person identity object for FRIDGECOP
@@ -81,8 +78,8 @@ class Fridge:
             for pos in right:
                 self.shift_ls.append([(shelf, pos)])
 
-        self.images, self.roi_images = parse_food()
-        
+        self.images, self.roi_images, self.item_names = parse_food()
+
     def open_fridge(self):
         """
         'Opens' the fridge and sets the person authenticator to the Person who opened it
@@ -114,19 +111,18 @@ class Fridge:
             if isinstance(item,tuple) or isinstance(item,list):
                 for i in item:
                     i.owner = self.user
-                
-            if isinstance(item,tuple):
-                self.items += [i for i in item]
-                for i in item:
+                    self.items += [i for i in item]
                     image = self.images[self.item_names.index(i.name)]
-                    self.fridge = layer_image(self.fridge, propose_regions(image), image, self.shift_ls.pop(np.random.randint(len(self.shift_ls))))
+                    self.fridge = layer_image(self.fridge, propose_regions(image), image,
+                                              self.shift_ls.pop(np.random.randint(len(self.shift_ls))))
                 
             if isinstance(item,Item):
                 item.owner = self.user
                 self.items.append(item)
-                
-            if isinstance(item,list):
-                self.items += item
+                image = self.images[self.item_names.index(item.name)]
+                self.fridge = layer_image(self.fridge, propose_regions(image), image,
+                                          self.shift_ls.pop(np.random.randint(len(self.shift_ls))))
+
         if self.user is None:
             pass
         
@@ -151,12 +147,15 @@ class Fridge:
             for i in item:
                 if i.owner != self.user:
                     self.thief.append(f"{self.user} took {i.owner.name}'s {i.name}'")
-                else:
-                    throwaway = [self.items.remove(i) for i in item][0]
+                image = self.images[self.item_names.index(i.name)]
+                self.fridge = remove_item(image, i.left, i.top)
+            throwaway = [self.items.remove(i) for i in item][0]
         if isinstance(item,Item):
             if item.owner != self.user:
                 self.thief.append(f"{self.user} took {item.owner.name}'s {item.name}'")
             self.items.remove(item)
+            image = self.images[self.item_names.index(item.name)]
+            self.fridge = remove_item(image, item.left, item.top)
             
         if self.thief == []:
             return None
