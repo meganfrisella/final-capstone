@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import PIL.Image
 #%matplotlib inline
-import generate_labels
+from generate_labels import one_hot
 
 
 def propose_regions(image, threshold=0.1):
@@ -115,4 +115,3 @@ def generate_fridge(num_items):
     plt.imshow(fridge)
     plt.show()
 
-generate_fridge(25)
