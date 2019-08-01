@@ -1,5 +1,8 @@
 import numpy as np
 import pickle
+from generate_fridge import layer_image
+from generate_fridge import propose_regions
+from generate_fridge import parse_food
 
 class Person: 
     '''Person identity object for FRIDGECOP
@@ -116,6 +119,15 @@ class Fridge:
         self.items = []
         self.user = None
         self.fridge = mpimg.imread('fridge.jpg')
+
+        right = [shift for shift in range(30, 400, 80)]
+        shelf_coord = [180, 300, 420, 540, 690]  # coordinates of the first, second ... shelves
+        self.shift_ls = []  # possible positions for an item
+        for shelf in shelf_coord:
+            for pos in right:
+                self.shift_ls.append([(shelf, pos)])
+
+        self.images, self.roi_images = parse_food()
         
     def open_fridge(self):
         """
@@ -130,7 +142,7 @@ class Fridge:
         if photo_consent:
             self.user = TAKE_PHOTO_AND_RETURN_PERSON_OBJECT()
                 
-    def add_item(self,item):
+    def add_item(self,item_name):
         """
         Adds item(s) to the fridge
         
@@ -138,7 +150,7 @@ class Fridge:
         -----------
         item [Union(tuple[Item] or Item)]
             A tuple of Item objects or a single Item object
-            
+
         Returns:
         --------
         None
@@ -151,6 +163,9 @@ class Fridge:
                 
             if isinstance(item,tuple):
                 self.items += [i for i in item]
+                for i in item:
+                    image = self.images[self.item_names.index(i.name)]
+                    self.fridge = layer_image(self.fridge, propose_regions(image), image, self.shift_ls.pop(np.random.randint(len(self.shift_ls))))
                 
             if isinstance(item,Item):
                 item.owner = self.user
