@@ -116,7 +116,7 @@ class Fridge:
         self.items = []
         self.user = None
         self.fridge = mpimg.imread('fridge.jpg')
-        
+
     def open_fridge(self):
         """
         'Opens' the fridge and sets the person authenticator to the Person who opened it
