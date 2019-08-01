@@ -19,7 +19,7 @@ class Person:
         self.mean_facial_descriptor = facial_desc
 
     def __repr__(self):
-        return "FCP: {} ∆ V:{}, F:{}".format(self.name,len(self.vocal_descriptors),len(self.facial_descriptors))
+        return "FCP: {}".format(self.name)
     
             
     def vocal_match(self,vocal_desc_to_be_matched,cutoff):
