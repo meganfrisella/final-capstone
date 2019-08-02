@@ -1,5 +1,5 @@
 import numpy as np
-import pickle
+from update_fridge import remove_item, layer_image, propose_regions, parse_food
 
 class Person: 
     '''Person identity object for FRIDGECOP
@@ -71,6 +71,15 @@ class Fridge:
         self.user = None
         self.fridge = mpimg.imread('fridge.jpg')
 
+        right = [shift for shift in range(30, 400, 80)]
+        shelf_coord = [180, 300, 420, 540, 690]  # coordinates of the first, second ... shelves
+        self.shift_ls = []  # possible positions for an item
+        for shelf in shelf_coord:
+            for pos in right:
+                self.shift_ls.append([(shelf, pos)])
+
+        self.images, self.roi_images, self.item_names = parse_food()
+
     def open_fridge(self):
         """
         'Opens' the fridge and sets the person authenticator to the Person who opened it
@@ -84,7 +93,7 @@ class Fridge:
         if photo_consent:
             self.user = TAKE_PHOTO_AND_RETURN_PERSON_OBJECT()
                 
-    def add_item(self,item):
+    def add_item(self,item_name):
         """
         Adds item(s) to the fridge
         
@@ -92,7 +101,7 @@ class Fridge:
         -----------
         item [Union(tuple[Item] or Item)]
             A tuple of Item objects or a single Item object
-            
+
         Returns:
         --------
         None
@@ -102,16 +111,18 @@ class Fridge:
             if isinstance(item,tuple) or isinstance(item,list):
                 for i in item:
                     i.owner = self.user
-                
-            if isinstance(item,tuple):
-                self.items += [i for i in item]
+                    self.items += [i for i in item]
+                    image = self.images[self.item_names.index(i.name)]
+                    self.fridge = layer_image(self.fridge, propose_regions(image), image,
+                                              self.shift_ls.pop(np.random.randint(len(self.shift_ls))))
                 
             if isinstance(item,Item):
                 item.owner = self.user
                 self.items.append(item)
-                
-            if isinstance(item,list):
-                self.items += item
+                image = self.images[self.item_names.index(item.name)]
+                self.fridge = layer_image(self.fridge, propose_regions(image), image,
+                                          self.shift_ls.pop(np.random.randint(len(self.shift_ls))))
+
         if self.user is None:
             pass
         
@@ -136,12 +147,15 @@ class Fridge:
             for i in item:
                 if i.owner != self.user:
                     self.thief.append(f"{self.user} took {i.owner.name}'s {i.name}'")
-                else:
-                    throwaway = [self.items.remove(i) for i in item][0]
+                image = self.images[self.item_names.index(i.name)]
+                self.fridge = remove_item(image, i.left, i.top)
+            throwaway = [self.items.remove(i) for i in item][0]
         if isinstance(item,Item):
             if item.owner != self.user:
                 self.thief.append(f"{self.user} took {item.owner.name}'s {item.name}'")
             self.items.remove(item)
+            image = self.images[self.item_names.index(item.name)]
+            self.fridge = remove_item(image, item.left, item.top)
             
         if self.thief == []:
             return None
