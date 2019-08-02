@@ -5,6 +5,7 @@ from update_fridge import remove_item, layer_image, propose_regions, parse_food
 import face_rec
 import voice_rec
 import math
+from collections import defaultdict
 
 def items_close(item1, item2):
     """
@@ -95,7 +96,7 @@ class Fridge:
         """Initalizes an empty fridge"""
         self.items = []
         self.scanned_items = []
-        self.thief = []
+        self.thievery = defaultdict(list)
         self.user = None
         self.fridge = mpimg.imread('fridge.jpg')
 
@@ -177,7 +178,7 @@ class Fridge:
             
         Returns:
         --------
-        None or list of thievery (if item belongs to opener or not, respectively)
+        None
         """
         
         if isinstance(item_name, list):
@@ -189,8 +190,6 @@ class Fridge:
                 if item_obj is None:
                     print("FRIDGECOP does not recognize that food item")
                     return
-                if item_obj.owner != self.user:
-                    self.thief.append(f"{self.user} took {item_obj.owner.name}'s {name}'")
                 image = self.images[self.item_names.index(name)]
                 self.fridge = remove_item(image, item_obj.left, item_obj.top)
                 self.shift_ls.remove((item_obj.top, item_obj.left))
@@ -203,27 +202,39 @@ class Fridge:
             if item_obj is None:
                 print("FRIDGECOP does not recognize that food item")
                 return
-            if item_obj.owner != self.user:
-                self.thief.append(f"{self.user} took {item_obj.owner.name}'s {name}'")
             image = self.images[self.item_names.index(name)]
             self.fridge = remove_item(image, item_obj.left, item_obj.top)
             self.shift_ls.remove((item_obj.top, item_obj.left))
             
-        if len(self.thief) == 0:
-            return None
-        else:
-            return self.thief
 
     def close_fridge(self):
         self.new_scan = SCAN_FRIDGE() #returns list of Item objects
         #self.scanned_items
         
         self.added_items = []
+        self.taken_items = []
+
+        
         for i in self.new_scan:
+            new = True
             for si in self.scanned_items:
-                if not items_close(i, si): #!!!!!!!!:
-                    self.added_items.append(i)
+                if items_close(i, si): #!!!!!!!!:
+                    new = False
+            if new:
+                self.added_items.append(i)
                 
+        for si in self.scanned_items:
+            taken = True
+            for i in self.new_scan:
+                if items_close(i, si):
+                    taken = False
+            if taken:
+                self.taken_items.append(si)
+        
+        for i in self.taken_items:
+            if self.user != i.owner:
+                self.thievery[i.owner].append(f"{self.user} took your {i.name}")
+
         for i in self.added_items:
             i.owner = self.user
         
@@ -232,10 +243,27 @@ class Fridge:
 
 
 def check_fridge(fridge,person):
+    """
+    Checks the fridge for a person's food
+
+    Parameters:
+    -----------
+    fridge [Fridge object]
+        the fridge to be checked
+
+    person [Person object]
+        the person to see
+
+    Returns:
+    --------
+    [string]
+        What alexa should say afterwards
+        "You have {x}, {y}, {z} in your fridge, and {person} stole {w}
+    """
     person_list = []
     for i in fridge.scanned_items:
-        if i.owner = person:
+        if i.owner == person:
             person_list.append(i.name)
             
-    return str(person_list).strip('[]')
+    return str(person_list).strip('[]') + 'and' str(fridge.thievery).strip('[]')
         
