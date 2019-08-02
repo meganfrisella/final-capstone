@@ -99,14 +99,16 @@ class Fridge:
         
         Parameters:
         -----------
-        item [Union(tuple[Item] or Item)]
-            A tuple of Item objects or a single Item object
+        item_name [string]
+            The string item name
 
         Returns:
         --------
         None
         """
         
+        #INITIALIZE OBJECT FROM item_name
+
         if self.user is not None:
             if isinstance(item,tuple) or isinstance(item,list):
                 for i in item:
