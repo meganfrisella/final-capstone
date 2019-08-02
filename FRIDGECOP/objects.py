@@ -220,7 +220,7 @@ class Fridge:
         self.added_items = []
         for i in self.new_scan:
             for si in self.scanned_items:
-                if not items__close(i, si): #!!!!!!!!:
+                if not items_close(i, si): #!!!!!!!!:
                     self.added_items.append(i)
                 
         for i in self.added_items:
