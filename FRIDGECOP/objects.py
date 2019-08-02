@@ -1,7 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
-import PIL.Image
 from update_fridge import remove_item, layer_image, propose_regions, parse_food
 
 
@@ -63,6 +62,7 @@ class Person:
         """
         return np.sum((self.mean_vocal_descriptor - facial_desc_to_be_matched)**2) ** (1 / 2) < cutoff
 
+
 class Item:
     def __init__(self, left, top, name, category, owner):
         self.left = left
@@ -70,6 +70,7 @@ class Item:
         self.name = name
         self.category = category
         self.owner = owner
+
 
 class Fridge:
     """
@@ -109,7 +110,7 @@ class Fridge:
         if photo_consent:
             self.user = TAKE_PHOTO_AND_RETURN_PERSON_OBJECT()
                 
-    def add_item(self,item_name):
+    def add_item(self, item_name):
         """
         Adds item(s) to the fridge
         
@@ -127,18 +128,18 @@ class Fridge:
             if isinstance(item_name, list):
                 for i in item_name:
                     if i in self.item_names:
-                        if len(self.shift_ls) == 0: #Checks if there are no available spaces in the fridge
+                        if len(self.shift_ls) == 0:  # Checks if there are no available spaces in the fridge
                             print("FRIDGECOP says the fridge is full")
                             return
                         position = self.shift_ls.pop(np.random.randint(len(self.shift_ls)))
                         category = self.categories[self.item_names.index(i)]
-                        self.items.append(Item(position[1],position[0],i,category,self.user))
+                        self.items.append(Item(position[1], position[0], i, category, self.user))
                         image = self.images[self.item_names.index(i)]
                         self.fridge = layer_image(self.fridge, propose_regions(image), image, position)
                     else:
                         print("FRIDGECOP does not recognize this food item")
                 
-            if isinstance(item_name,str):
+            if isinstance(item_name, str):
                 if item_name in self.item_names:
                     if len(self.shift_ls) == 0:  # Checks if there are no available spaces in the fridge
                         print("FRIDGECOP says the fridge is full")
