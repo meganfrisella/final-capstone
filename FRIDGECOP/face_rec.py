@@ -2,6 +2,7 @@ from dlib_models import download_model, download_predictor, load_dlib_models
 from dlib_models import models
 import numpy as np
 import pickle
+from camera import take_picture
 
 #download_model()
 #download_predictor()
@@ -28,8 +29,7 @@ def run():
     """
     image = take_picture()
     descriptors = image_to_descriptors(image)
-    detections = image_to_detections(image)
-    return recognize_image(detections[0])
+    return recognize_image(descriptors[0])
 
 
 def image_to_descriptors(image):
