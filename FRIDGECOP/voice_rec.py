@@ -2,7 +2,7 @@ import numpy as np
 from microphone import record_audio
 import pickle
 
-f = open("model.p", "rb")
+f = open("model2.p", "rb")
 model = pickle.load(f)
 f.close()
 
@@ -55,10 +55,10 @@ def find_match(emb):
     f.close()
 
     matches = []
-    for profile in people.values():
-        mean_emb = profile.mean_desc
+    for person in people:
+        mean_emb = person.mean_vocal_descriptor
         similarity = np.dot(emb, mean_emb)
-        matches.append((profile, similarity))
+        matches.append((person, similarity))
 
     matches = sorted(matches, key=lambda item: item[1])
     return matches[-1][0]
