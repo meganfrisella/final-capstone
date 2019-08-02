@@ -1,5 +1,7 @@
 import numpy as np
+import matplotlib.pyplot as plt
 from update_fridge import remove_item, layer_image, propose_regions, parse_food
+
 
 class Person: 
     '''Person identity object for FRIDGECOP
@@ -20,8 +22,7 @@ class Person:
 
     def __repr__(self):
         return "FCP: {}".format(self.name)
-    
-            
+
     def vocal_match(self,vocal_desc_to_be_matched,cutoff):
         """
         Returns boolean if the to_be_matched vocal descriptor matches this Person
@@ -60,6 +61,7 @@ class Person:
         """
         return np.sum((self.mean_vocal_descriptor - facial_desc_to_be_matched)**2) ** (1 / 2) < cutoff
 
+
 class Fridge:
     """
     Fridge object for simulating a FRIDGECOP® fridge
@@ -79,6 +81,10 @@ class Fridge:
                 self.shift_ls.append([(shelf, pos)])
 
         self.images, self.roi_images, self.item_names = parse_food()
+
+    def show_fridge(self):
+        plt.imshow(self.fridge)
+        plt.show()
 
     def open_fridge(self):
         """
