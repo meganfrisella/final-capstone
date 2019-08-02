@@ -106,8 +106,7 @@ class Fridge:
         --------
         None
         """
-        
-        #INITIALIZE OBJECT FROM item_name
+
 
         if self.user is not None:
             if isinstance(item,tuple) or isinstance(item,list):
