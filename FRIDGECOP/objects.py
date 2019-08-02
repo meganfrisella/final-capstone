@@ -133,8 +133,6 @@ class Fridge:
                             print("FRIDGECOP says the fridge is full")
                             return
                         position = self.shift_ls.pop(np.random.randint(len(self.shift_ls)))
-                        category = self.categories[self.item_names.index(i)]
-                        self.items.append(Item(position[1], position[0], i, category, self.user))
                         image = self.images[self.item_names.index(i)]
                         self.fridge = layer_image(self.fridge, propose_regions(image), image, position)
                     else:
@@ -146,8 +144,6 @@ class Fridge:
                         print("FRIDGECOP says the fridge is full")
                         return
                     position = self.shift_ls.pop(np.random.randint(len(self.shift_ls)))
-                    category = self.categories[self.item_names.index(item_name)]
-                    self.items.append(Item(position[1], position[0], item_name, category, self.user))
                     image = self.images[self.item_names.index(item_name)]
                     self.fridge = layer_image(self.fridge, propose_regions(image), image, position)
                 else:
@@ -184,7 +180,6 @@ class Fridge:
                 image = self.images[self.item_names.index(name)]
                 self.fridge = remove_item(image, item_obj.left, item_obj.top)
                 self.shift_ls.remove((item_obj.top, item_obj.left))
-                self.items.remove(item_obj)
         if isinstance(item_name, Item):
             name = item_name
             item_obj = None
@@ -199,7 +194,6 @@ class Fridge:
             image = self.images[self.item_names.index(name)]
             self.fridge = remove_item(image, item_obj.left, item_obj.top)
             self.shift_ls.remove((item_obj.top, item_obj.left))
-            self.items.remove(item_obj)
             
         if len(self.thief) == 0:
             return None
