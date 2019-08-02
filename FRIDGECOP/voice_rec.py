@@ -2,7 +2,7 @@ import numpy as np
 from microphone import record_audio
 import pickle
 
-f = open("model.p", "rb")
+f = open("model2.p", "rb")
 model = pickle.load(f)
 f.close()
 
