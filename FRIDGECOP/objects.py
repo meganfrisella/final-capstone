@@ -265,5 +265,5 @@ def check_fridge(fridge,person):
         if i.owner == person:
             person_list.append(i.name)
             
-    return str(person_list).strip('[]') + 'and' str(fridge.thievery).strip('[]')
+    return str(person_list).strip('[]') + 'and' + str(fridge.thievery).strip('[]')
         
