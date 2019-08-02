@@ -166,7 +166,7 @@ class Fridge:
                     print("FRIDGECOP does not recognize this food item")
 
         if self.user is None:
-            pass
+            print("the fridge isn't open")
 
     def take_item(self, item_name):
         """
@@ -185,7 +185,7 @@ class Fridge:
         if isinstance(item_name, list):
             for name in item_name:
                 item_obj = None
-                for fr_item in self.items:
+                for fr_item in self.scanned_items:
                     if fr_item.name == name:
                         item_obj = fr_item
                 if item_obj is None:
@@ -194,10 +194,10 @@ class Fridge:
                 image = self.images[self.item_names.index(name)]
                 self.fridge = remove_item(image, item_obj.left, item_obj.top)
                 self.shift_ls.remove((item_obj.top, item_obj.left))
-        if isinstance(item_name, Item):
+        if isinstance(item_name, str):
             name = item_name
             item_obj = None
-            for fr_item in self.items:
+            for fr_item in self.scanned_items:
                 if fr_item.name == name:
                     item_obj = fr_item
             if item_obj is None:
