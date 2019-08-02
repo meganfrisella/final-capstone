@@ -2,8 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 from update_fridge import remove_item, layer_image, propose_regions, parse_food
-import face_rec
-import voice_rec
 import math
 from collections import defaultdict
 
@@ -98,7 +96,7 @@ class Fridge:
         self.scanned_items = []
         self.thievery = defaultdict(list)
         self.user = None
-        self.fridge = mpimg.imread('fridge.jpg')
+        self.fridge = np.array(mpimg.imread('fridge.jpg'))
 
         right = [shift for shift in range(30, 400, 80)]
         shelf_coord = [180, 300, 420, 540, 690]  # coordinates of the first, second ... shelves
@@ -152,6 +150,7 @@ class Fridge:
                         self.fridge = layer_image(self.fridge, propose_regions(image), image, position)
                     else:
                         print("FRIDGECOP does not recognize this food item")
+                        return
                 
             if isinstance(item_name, str):
                 if item_name in self.item_names:
