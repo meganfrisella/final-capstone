@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 from update_fridge import remove_item, layer_image, propose_regions, parse_food
 import face_rec
+import voice_rec
 import math
 
 def items_close(item1, item2):
@@ -226,4 +227,15 @@ class Fridge:
         for i in self.added_items:
             i.owner = self.user
         
+        self.scanned_items = self.new_scan
         self.user = None
+
+
+def check_fridge(fridge,person):
+    person_list = []
+    for i in fridge.scanned_items:
+        if i.owner = person:
+            person_list.append(i.name)
+            
+    return str(person_list).strip('[]')
+        
