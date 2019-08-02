@@ -1,5 +1,4 @@
 import functions
-import train
 import numpy as np
 
 

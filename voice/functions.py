@@ -2,11 +2,13 @@ import numpy as np
 from microphone import record_audio
 import librosa
 import pickle
-import train
-import matplotlib.pyplot as plt
 
 f = open("model.p", "rb")
 model = pickle.load(f)
+f.close()
+
+f = open("mean_and_std.p", "rb")
+mean, std = pickle.load(f)
 f.close()
 
 
@@ -119,7 +121,7 @@ def find_phrase_match(desc, cutoff=0.5):
     return matches[-3:]
 
 
-def find_encoder_match(emb, cutoff=0.5):
+def find_encoder_match(emb, cutoff=0.8):
 
     f = open("encoder.p", "rb")
     people = pickle.load(f)
@@ -130,12 +132,14 @@ def find_encoder_match(emb, cutoff=0.5):
         mean_emb = profile.mean_desc
         similarity = np.dot(emb, mean_emb)
         matches.append((profile.name, similarity))
-        print(profile.name, similarity)
 
     matches = sorted(matches, key=lambda item: item[1])
-    return matches[-3:]
+    return matches[-1][0]
 
 
 def get_embedding(sample):
-    return model(sample).data
+    dft = np.abs(np.fft.rfft(sample))
+    dft -= mean
+    dft /= std
+    return model(dft).data
 
