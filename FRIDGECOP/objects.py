@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from update_fridge import remove_item, layer_image, propose_regions, parse_food
+import face_rec
 
 
 class Person: 
@@ -97,7 +98,7 @@ class Fridge:
             self.user = None
             pass
         if photo_consent:
-            self.user = TAKE_PHOTO_AND_RETURN_PERSON_OBJECT()
+            self.user = face_rec.run()
                 
     def add_item(self,item_name):
         """

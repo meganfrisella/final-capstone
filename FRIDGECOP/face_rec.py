@@ -1,0 +1,107 @@
+from dlib_models import download_model, download_predictor, load_dlib_models
+from dlib_models import models
+import numpy as np
+import database
+
+#download_model()
+#download_predictor()
+load_dlib_models()
+
+face_detect = models["face detect"]
+face_rec_model = models["face rec"]
+shape_predictor = models["shape predict"]
+
+
+def run():
+    """
+    Takes a photo on the computer's camera and detects faces.
+    If a face is recognized, it's name is displayed. If not,
+    the user is prompted to enter a name and the person is
+    added to the database.
+
+    Parameters
+    ----------
+
+    Returns
+    -------
+
+    """
+    image = take_picture()
+    descriptors = image_to_descriptors(image)
+    detections = image_to_detections(image)
+    return recognize_image(detections[0])
+
+
+def image_to_descriptors(image):
+    """
+    Detects faces in an image array and generates a
+    128-D descriptor vector for each one.
+
+    Parameters
+    ----------
+    image : np.array[int]
+        RGB image-array or 8-bit grayscale
+
+    Returns
+    -------
+    List[np.array[float]]
+        List of descriptor vectors for each detected
+        face in the image
+
+    """
+    # Detect faces in the image
+    detections = list(face_detect(image))
+
+    # Create a descriptor for each face
+    descriptors = []
+
+    for face in detections:
+        shape = shape_predictor(image, face)
+        descriptor = np.array(face_rec_model.compute_face_descriptor(image, shape))
+        descriptors.append(descriptor)
+
+    return descriptors
+
+
+def image_to_detections(image):
+    """
+    Detects faces in an image and generates rectangular
+    coordinates that describe each one.
+
+    Parameters
+    ----------
+    image : np.array[int]
+        RGB image-array or 8-bit grayscale
+
+    Returns
+    -------
+    List[rectangle]
+        List of coordinates for each detected face.
+
+    """
+    return list(face_detect(image))
+
+
+def recognize_image(desc):
+    """
+
+
+    Parameters
+    ----------
+
+
+    Returns
+    -------
+
+
+    """
+    data = database.load_database()
+
+    diffs = []
+    for profile in data.values():
+        mean_desc = profile.mean_desc
+        difference = np.sqrt(np.sum(np.square(mean_desc-desc)))
+        diffs.append((difference, profile))
+
+    diffs = sorted(diffs)
+    return diffs[-1][1]
