@@ -1,0 +1,231 @@
+dairy, junk
+fruit
+fruit, grain
+fruit
+seafood
+fruit
+grain
+seafood
+junk
+meat
+dairy, fruit
+vegetable
+vegetable
+seafood
+dairy
+meat
+grain, junk
+junk
+dairy
+vegetable, dairy
+grain, fruit, junk
+fruit
+grain
+drink
+drink
+vegetable
+grain
+fruit
+seafood
+vegetable
+vegetable, meat, grain
+grain
+grain, fruit, junk
+grain
+fruit
+water
+seafood
+meat
+meat
+meat
+dairy, junk
+meat, vegetable, grain
+grain, seafood, vegetable
+dairy, junk
+dairy, junk
+seafood
+vegetable
+vegetable
+grain
+meat
+fruit
+meat, grain
+meat, grain, junk
+meat
+grain, junk
+grain
+fruit
+grain, junk
+dairy, junk
+dairy
+grain
+junk
+grain
+meat
+nonmeat protein
+grain
+fruit
+nonmeat protein
+fruit
+grain
+vegetable
+nonmeat protein
+grain
+fruit
+meat
+fruit
+nonmeat protein
+meat
+vegetable
+seafood
+grain
+junk
+drink
+fruit
+grain, dairy
+grain, junk
+dairy, junk
+fruit
+meat, grain
+junk
+meat
+fruit
+grain, junk
+grain
+seafood
+seafood, rice
+drink
+nonmeat protein
+fruit
+grain
+grain
+meat
+vegetable
+seafood
+grain
+grain
+grain, dairy, junk
+fruit, junk
+fruit
+meat
+grain
+dairy, junk
+junk
+drink
+grain
+grain, junk
+grain
+dairy
+fruit
+vegetable
+nonmeat protein
+vegetable
+fruit
+fruit
+meat, grain, junk
+dairy
+meat
+fruit
+seafood
+seafood
+vegetable
+seafood
+vegetable
+meat
+vegetable
+seafood
+vegetable
+vegetable, sefaood
+grain
+vegetable
+grain, junk
+fruit
+vegetable
+drink
+drink
+drink
+grain, meat
+drink
+vegetable
+grain
+meat, grain
+meat
+meat
+grain
+grain
+vegetable
+nonmeat protein
+drink
+drink
+grain, junk
+seafood
+meat
+seafood
+junk
+grain, dairy
+grain, dairy
+grain, junk
+grain
+meat, junk
+grain, junk
+grain, junk
+grain
+grain, junk
+dairy
+grain
+meat, junk
+drink
+grain
+grain
+grain, junk
+grain, dairy
+vegetable, junk
+grain, fruit
+fruit, junk
+vegetable
+nonmeat protein
+grain, dairy
+fruit, junk
+drink
+meat
+seafood
+fruit, junk
+grain, meat
+grain, junk
+dairy, junk
+dairy, junk
+grain
+junk
+dairy, junk
+vegetable, junk
+grain, dairy
+dairy, junk
+grain
+grain, junk
+dairy, grain, junk
+drink
+grain
+meat, vegetable, grain, junk
+grain
+drink
+vegetable
+vegetable
+dairy, junk
+grain
+grain, vegetable, meat
+dairy, junk
+grain
+seafood
+grain, nonmeat protein
+vegetable
+seafood
+vegetable
+water
+seafood
+junk
+grain
+grain
+meat
+grain, dairy, junk
+vegetable, vegetable
+junk

@@ -2,9 +2,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 from update_fridge import remove_item, layer_image, propose_regions, parse_food
+import math
 import face_rec
 import voice_rec
-import math
 from collections import defaultdict
 
 def items_close(item1, item2):
@@ -94,18 +94,19 @@ class Fridge:
     
     def __init__(self):
         """Initalizes an empty fridge"""
+        print("Initialized an empty fridge")
         self.items = []
         self.scanned_items = []
         self.thievery = defaultdict(list)
         self.user = None
-        self.fridge = mpimg.imread('fridge.jpg')
+        self.fridge = np.array(mpimg.imread('fridge.jpg'))
 
         right = [shift for shift in range(30, 400, 80)]
         shelf_coord = [180, 300, 420, 540, 690]  # coordinates of the first, second ... shelves
         self.shift_ls = []  # possible positions for an item of (top, left)
         for shelf in shelf_coord:
             for pos in right:
-                self.shift_ls.append(tuple(shelf, pos))
+                self.shift_ls.append((shelf, pos))
 
         self.images, self.roi_images, self.item_names, self.categories = parse_food()
 
@@ -152,8 +153,10 @@ class Fridge:
                         self.fridge = layer_image(self.fridge, propose_regions(image), image, position)
                     else:
                         print("FRIDGECOP does not recognize this food item")
+                        return
                 
             if isinstance(item_name, str):
+                print("in1")
                 if item_name in self.item_names:
                     if len(self.shift_ls) == 0:  # Checks if there are no available spaces in the fridge
                         print("FRIDGECOP says the fridge is full")
@@ -161,11 +164,12 @@ class Fridge:
                     position = self.shift_ls.pop(np.random.randint(len(self.shift_ls)))
                     image = self.images[self.item_names.index(item_name)]
                     self.fridge = layer_image(self.fridge, propose_regions(image), image, position)
+                    print("in")
                 else:
                     print("FRIDGECOP does not recognize this food item")
 
         if self.user is None:
-            pass
+            print("the fridge isn't open")
 
     def take_item(self, item_name):
         """
@@ -184,7 +188,7 @@ class Fridge:
         if isinstance(item_name, list):
             for name in item_name:
                 item_obj = None
-                for fr_item in self.items:
+                for fr_item in self.scanned_items:
                     if fr_item.name == name:
                         item_obj = fr_item
                 if item_obj is None:
@@ -193,10 +197,10 @@ class Fridge:
                 image = self.images[self.item_names.index(name)]
                 self.fridge = remove_item(image, item_obj.left, item_obj.top)
                 self.shift_ls.remove((item_obj.top, item_obj.left))
-        if isinstance(item_name, Item):
+        if isinstance(item_name, str):
             name = item_name
             item_obj = None
-            for fr_item in self.items:
+            for fr_item in self.scanned_items:
                 if fr_item.name == name:
                     item_obj = fr_item
             if item_obj is None:

@@ -101,7 +101,7 @@ def parse_food():
 
 
 def generate_fridge(num_items):
-    images, roi_images, labels = parse_food()
+    images, roi_images, labels, cat = parse_food()
     right = [shift for shift in range(30, 400, 80)]
     shelf_coord = [180, 300, 420, 540, 690]  # coordinates of the first, second ... shelves
     shift_ls = [] #possible positions for an item

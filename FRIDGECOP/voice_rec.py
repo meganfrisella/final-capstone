@@ -55,10 +55,10 @@ def find_match(emb):
     f.close()
 
     matches = []
-    for person in people.values():
+    for person in people:
         mean_emb = person.mean_vocal_descriptor
         similarity = np.dot(emb, mean_emb)
-        matches.append((profile, similarity))
+        matches.append((person, similarity))
 
     matches = sorted(matches, key=lambda item: item[1])
     return matches[-1][0]
