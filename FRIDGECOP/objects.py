@@ -199,3 +199,17 @@ class Fridge:
             return None
         else:
             return self.thief
+
+    def close_fridge(self):
+        self.new_scan = SCAN_FRIDGE() #returns list of Item objects
+        #self.scanned_items
+        
+        self.added_items = []
+        for i in self.new_scan:
+            if i not ISCLOSE(() self.scanned_items)) #!!!!!!!!:
+                self.added_items.append(i)
+                
+        for i in self.added_items:
+            i.owner = self.user
+        
+        self.user = None
