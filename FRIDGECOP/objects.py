@@ -103,7 +103,7 @@ class Fridge:
         self.shift_ls = []  # possible positions for an item of (top, left)
         for shelf in shelf_coord:
             for pos in right:
-                self.shift_ls.append(tuple(shelf, pos))
+                self.shift_ls.append(tuple([shelf, pos]))
 
         self.images, self.roi_images, self.item_names, self.categories = parse_food()
 
