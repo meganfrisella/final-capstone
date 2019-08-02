@@ -6,6 +6,7 @@ import math
 import face_rec
 import voice_rec
 from collections import defaultdict
+import CompiledFridge
 
 def items_close(item1, item2):
     """
