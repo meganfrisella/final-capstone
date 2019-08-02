@@ -63,25 +63,6 @@ def image_to_descriptors(image):
     return descriptors
 
 
-def image_to_detections(image):
-    """
-    Detects faces in an image and generates rectangular
-    coordinates that describe each one.
-
-    Parameters
-    ----------
-    image : np.array[int]
-        RGB image-array or 8-bit grayscale
-
-    Returns
-    -------
-    List[rectangle]
-        List of coordinates for each detected face.
-
-    """
-    return list(face_detect(image))
-
-
 def recognize_image(desc):
     """
 
@@ -107,4 +88,4 @@ def recognize_image(desc):
         diffs.append((difference, person))
 
     diffs = sorted(diffs)
-    return diffs[-1][1]
+    return diffs[0][1]
