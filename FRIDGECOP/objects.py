@@ -93,6 +93,7 @@ class Fridge:
     def __init__(self):
         """Initalizes an empty fridge"""
         self.items = []
+        self.scanned_items = []
         self.thief = []
         self.user = None
         self.fridge = mpimg.imread('fridge.jpg')
