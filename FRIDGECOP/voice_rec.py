@@ -55,8 +55,8 @@ def find_match(emb):
     f.close()
 
     matches = []
-    for profile in people.values():
-        mean_emb = profile.mean_desc
+    for person in people.values():
+        mean_emb = person.mean_vocal_descriptor
         similarity = np.dot(emb, mean_emb)
         matches.append((profile, similarity))
 

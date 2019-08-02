@@ -1,7 +1,7 @@
 from dlib_models import download_model, download_predictor, load_dlib_models
 from dlib_models import models
 import numpy as np
-import database
+import pickle
 
 #download_model()
 #download_predictor()
@@ -95,11 +95,14 @@ def recognize_image(desc):
 
 
     """
-    data = database.load_database()
+
+    f = open("people.p", "rb")
+    people = pickle.load(f)
+    f.close()
 
     diffs = []
-    for profile in data.values():
-        mean_desc = profile.mean_desc
+    for person in people.values():
+        mean_desc = person.mean_facial_descriptor
         difference = np.sqrt(np.sum(np.square(mean_desc-desc)))
         diffs.append((difference, profile))
 
