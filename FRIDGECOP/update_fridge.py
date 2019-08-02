@@ -2,8 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import PIL.Image
-#%matplotlib inline
-from generate_labels import one_hot
 
 
 def remove_item(img, left, top):
@@ -83,12 +81,13 @@ def parse_food():
     # new_labels is a list of tuples: (name, category)
     with open("indiv_labels.txt", mode="r") as var:
         new_labels = var.read().splitlines()
+    with open("food_labels_raw.txt", mode = "r") as f:
+        food_categories = f.read().splitlines()
 
     row_step = 1200 // 15
     col_step = 1280 // 16
 
     images = [] #list of each image's rgb arrays
-    labels = np.arange(232)
 
     for i in range(0, 1200, row_step):
         for j in range(0, 1280, col_step):
@@ -98,7 +97,7 @@ def parse_food():
     # list of each regionized image where 1 indicates object and 0 indicates background
     roi_images = np.array([propose_regions(i) for i in images])
 
-    return images, roi_images, labels
+    return images, roi_images, new_labels, food_categories
 
 
 def generate_fridge(num_items):

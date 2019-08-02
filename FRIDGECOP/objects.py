@@ -1,5 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
+import PIL.Image
 from update_fridge import remove_item, layer_image, propose_regions, parse_food
 
 
@@ -61,6 +63,13 @@ class Person:
         """
         return np.sum((self.mean_vocal_descriptor - facial_desc_to_be_matched)**2) ** (1 / 2) < cutoff
 
+class Item:
+    def __init__(self, left, top, name, category, owner):
+        self.left = left
+        self.top = top
+        self.name = name
+        self.category = category
+        self.owner = owner
 
 class Fridge:
     """
@@ -70,17 +79,18 @@ class Fridge:
     def __init__(self):
         """Initalizes an empty fridge"""
         self.items = []
+        self.thief = []
         self.user = None
         self.fridge = mpimg.imread('fridge.jpg')
 
         right = [shift for shift in range(30, 400, 80)]
         shelf_coord = [180, 300, 420, 540, 690]  # coordinates of the first, second ... shelves
-        self.shift_ls = []  # possible positions for an item
+        self.shift_ls = []  # possible positions for an item of (top, left)
         for shelf in shelf_coord:
             for pos in right:
-                self.shift_ls.append([(shelf, pos)])
+                self.shift_ls.append(tuple(shelf, pos))
 
-        self.images, self.roi_images, self.item_names = parse_food()
+        self.images, self.roi_images, self.item_names, self.categories = parse_food()
 
     def show_fridge(self):
         plt.imshow(self.fridge)
@@ -105,66 +115,91 @@ class Fridge:
         
         Parameters:
         -----------
-        item_name [string]
-            The string item name
+        item_name : String or List[String]
+            The item name as one String or a List of Strings
 
         Returns:
         --------
         None
         """
 
-
         if self.user is not None:
-            if isinstance(item,tuple) or isinstance(item,list):
-                for i in item:
-                    i.owner = self.user
-                    self.items += [i for i in item]
-                    image = self.images[self.item_names.index(i.name)]
-                    self.fridge = layer_image(self.fridge, propose_regions(image), image,
-                                              self.shift_ls.pop(np.random.randint(len(self.shift_ls))))
+            if isinstance(item_name, list):
+                for i in item_name:
+                    if i in self.item_names:
+                        if len(self.shift_ls) == 0: #Checks if there are no available spaces in the fridge
+                            print("FRIDGECOP says the fridge is full")
+                            return
+                        position = self.shift_ls.pop(np.random.randint(len(self.shift_ls)))
+                        category = self.categories[self.item_names.index(i)]
+                        self.items.append(Item(position[1],position[0],i,category,self.user))
+                        image = self.images[self.item_names.index(i)]
+                        self.fridge = layer_image(self.fridge, propose_regions(image), image, position)
+                    else:
+                        print("FRIDGECOP does not recognize this food item")
                 
-            if isinstance(item,Item):
-                item.owner = self.user
-                self.items.append(item)
-                image = self.images[self.item_names.index(item.name)]
-                self.fridge = layer_image(self.fridge, propose_regions(image), image,
-                                          self.shift_ls.pop(np.random.randint(len(self.shift_ls))))
+            if isinstance(item_name,str):
+                if item_name in self.item_names:
+                    if len(self.shift_ls) == 0:  # Checks if there are no available spaces in the fridge
+                        print("FRIDGECOP says the fridge is full")
+                        return
+                    position = self.shift_ls.pop(np.random.randint(len(self.shift_ls)))
+                    category = self.categories[self.item_names.index(item_name)]
+                    self.items.append(Item(position[1], position[0], item_name, category, self.user))
+                    image = self.images[self.item_names.index(item_name)]
+                    self.fridge = layer_image(self.fridge, propose_regions(image), image, position)
+                else:
+                    print("FRIDGECOP does not recognize this food item")
 
         if self.user is None:
             pass
-        
-            
-    def take_item(self,item):
+
+    def take_item(self, item_name):
         """
         Takes/removes item(s) from the fridge
         
         Parameters:
         -----------
-        item [Union(tuple[Item] or Item)]
-            A tuple of Item objects or a single Item object
+        item_name : String or List[String]
+            The item name as one String or a List of Strings
             
         Returns:
         --------
         None or list of thievery (if item belongs to opener or not, respectively)
         """
         
-        self.thief = []
-        
-        if isinstance(item,tuple) or isinstance(item,list):
-            for i in item:
-                if i.owner != self.user:
-                    self.thief.append(f"{self.user} took {i.owner.name}'s {i.name}'")
-                image = self.images[self.item_names.index(i.name)]
-                self.fridge = remove_item(image, i.left, i.top)
-            throwaway = [self.items.remove(i) for i in item][0]
-        if isinstance(item,Item):
-            if item.owner != self.user:
-                self.thief.append(f"{self.user} took {item.owner.name}'s {item.name}'")
-            self.items.remove(item)
-            image = self.images[self.item_names.index(item.name)]
-            self.fridge = remove_item(image, item.left, item.top)
+        if isinstance(item_name, list):
+            for name in item_name:
+                item_obj = None
+                for fr_item in self.items:
+                    if fr_item.name == name:
+                        item_obj = fr_item
+                if item_obj is None:
+                    print("FRIDGECOP does not recognize that food item")
+                    return
+                if item_obj.owner != self.user:
+                    self.thief.append(f"{self.user} took {item_obj.owner.name}'s {name}'")
+                image = self.images[self.item_names.index(name)]
+                self.fridge = remove_item(image, item_obj.left, item_obj.top)
+                self.shift_ls.remove((item_obj.top, item_obj.left))
+                self.items.remove(item_obj)
+        if isinstance(item_name, Item):
+            name = item_name
+            item_obj = None
+            for fr_item in self.items:
+                if fr_item.name == name:
+                    item_obj = fr_item
+            if item_obj is None:
+                print("FRIDGECOP does not recognize that food item")
+                return
+            if item_obj.owner != self.user:
+                self.thief.append(f"{self.user} took {item_obj.owner.name}'s {name}'")
+            image = self.images[self.item_names.index(name)]
+            self.fridge = remove_item(image, item_obj.left, item_obj.top)
+            self.shift_ls.remove((item_obj.top, item_obj.left))
+            self.items.remove(item_obj)
             
-        if self.thief == []:
+        if len(self.thief) == 0:
             return None
         else:
             return self.thief
