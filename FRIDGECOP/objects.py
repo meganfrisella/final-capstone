@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 from update_fridge import remove_item, layer_image, propose_regions, parse_food
 import math
+import face_rec
+import voice_rec
 from collections import defaultdict
 
 def items_close(item1, item2):
@@ -92,6 +94,7 @@ class Fridge:
     
     def __init__(self):
         """Initalizes an empty fridge"""
+        print("Initialized an empty fridge")
         self.items = []
         self.scanned_items = []
         self.thievery = defaultdict(list)
@@ -103,7 +106,7 @@ class Fridge:
         self.shift_ls = []  # possible positions for an item of (top, left)
         for shelf in shelf_coord:
             for pos in right:
-                self.shift_ls.append(tuple([shelf, pos]))
+                self.shift_ls.append((shelf, pos))
 
         self.images, self.roi_images, self.item_names, self.categories = parse_food()
 
@@ -153,6 +156,7 @@ class Fridge:
                         return
                 
             if isinstance(item_name, str):
+                print("in1")
                 if item_name in self.item_names:
                     if len(self.shift_ls) == 0:  # Checks if there are no available spaces in the fridge
                         print("FRIDGECOP says the fridge is full")
@@ -160,6 +164,7 @@ class Fridge:
                     position = self.shift_ls.pop(np.random.randint(len(self.shift_ls)))
                     image = self.images[self.item_names.index(item_name)]
                     self.fridge = layer_image(self.fridge, propose_regions(image), image, position)
+                    print("in")
                 else:
                     print("FRIDGECOP does not recognize this food item")
 
