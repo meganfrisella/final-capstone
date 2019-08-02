@@ -3,6 +3,18 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 from update_fridge import remove_item, layer_image, propose_regions, parse_food
 import face_rec
+import math
+
+def items_close(item1, item2):
+    """
+    Checks if two items are relatively close to account for object detection error
+    :param item1: Item object
+    :param item2: Item object
+    :return: boolean
+        True or False if the distance is within 30 pixels
+    """
+    dist = math.sqrt((item1.top - item2.top) ** 2 + (item1.left - item2.left) ** 2)
+    return dist <= 30
 
 
 class Person: 
