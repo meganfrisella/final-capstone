@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 from update_fridge import remove_item, layer_image, propose_regions, parse_food
 import math
+import face_rec
+import voice_rec
 from collections import defaultdict
 
 def items_close(item1, item2):
