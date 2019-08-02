@@ -25,7 +25,7 @@ class Person:
     def __repr__(self):
         return "FCP: {}".format(self.name)
 
-    def vocal_match(self,vocal_desc_to_be_matched,cutoff):
+    def vocal_match(self,vocal_desc_to_be_matched, cutoff):
         """
         Returns boolean if the to_be_matched vocal descriptor matches this Person
         
