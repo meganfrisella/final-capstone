@@ -66,4 +66,4 @@ def find_match(emb):
         matches.append((person, similarity))
 
     matches = sorted(matches, key=lambda item: item[1])
-    return matches
+    return matches[-1][0]

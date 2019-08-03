@@ -12,7 +12,7 @@ def initialize_database():
         pickle.dump(people, opened_file)
 
 
-def add_person(num_photos=3, num_recordings=5):
+def add_person(num_photos=5, num_recordings=5):
     name = input("What is your name (First Last)? ")
 
     print("We will take 5 five-second recordings of your voice. Please speak consistently for the "
@@ -31,11 +31,9 @@ def add_person(num_photos=3, num_recordings=5):
 
     print("We will take 3 pictures of your face. Please move your head slightly in between photos.")
 
-    ans = input("Hit 'Enter' when ready")
-
     descs = []
     for i in range(num_photos):
-        print(f"Taking photo {i+1}")
+        ans = input(f"Hit 'Enter' to take photo {i+1}")
         image = take_picture()
         desc = face_rec.image_to_descriptors(image)[0]
         descs.append(desc)
