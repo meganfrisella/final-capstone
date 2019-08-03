@@ -289,11 +289,11 @@ class Fridge:
 
         self.user = None
 
-        with open("fridge.p",'wb') as f:
-            pickle.dump(self,f)
+        with open("fridge.p", 'wb') as f:
+            pickle.dump(self, f)
 
 
-def check_fridge(fridge,person):
+def check_fridge(fridge, person):
     """
     Checks the fridge for a person's food
 
@@ -313,24 +313,28 @@ def check_fridge(fridge,person):
     """
     person_list = []
 
+    print([i.name for i in fridge.scanned_items])
+    print([i.owner for i in fridge.scanned_items])
+
+
     if fridge.scanned_items == []:
         return "Hello" + str(person.name) + ". There is nothing in the fridge"
 
     for i in fridge.scanned_items:
-        if i.owner == person:
+        if i.owner.name == person.name:
             person_list.append(i.name)
-    
+    print(person_list)
 
     if person_list == [] and fridge.thievery == defaultdict(list):
         return "Hello" + str(person.name) + ". You don't have anything in the fridge."
 
     if person_list == [] and fridge.thievery != defaultdict(list):
-        return "Hello" + str(person.name) + ". You don't have anything in the fridge, but " + str(fridge.thievery[person]).strip('[]')
+        return "Hello" + str(person.name) + ". You don't have anything in the fridge. " + str(fridge.thievery[person]).strip('[]')
 
     if fridge.thievery == defaultdict(list):
-        return "Hello" + str(person.name) + ". In the fridge you have " + str(person_list).strip('[]')  
+        return "Hello " + str(person.name) + ". In the fridge you have " + str(person_list).strip('[]')
     else:  
-        return "Hello" + str(person.name) + ". In the fridge you have " + str(person_list).strip('[]') + '. Also, ' + str(fridge.thievery[person]).strip('[]')
+        return "Hello " + str(person.name) + ". In the fridge you have " + str(person_list).strip('[]') + '. Also, ' + str(fridge.thievery[person]).strip('[]')
 
 def print_fridge(fridge):
     print([i.name for i in fridge.scanned_items])
