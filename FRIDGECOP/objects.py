@@ -4,7 +4,6 @@ import matplotlib.image as mpimg
 from update_fridge import remove_item, layer_image, propose_regions, parse_food
 import math
 from collections import defaultdict
-import CompiledFridge
 
 def items_close(item1, item2):
     """
@@ -18,7 +17,7 @@ def items_close(item1, item2):
     return dist <= 30
 
 
-class Person: 
+class Person:
     '''Person identity object for FRIDGECOP
     Parameters:
     name [string]
@@ -28,11 +27,11 @@ class Person:
     facial_desc [np.array of shape(1,128)]
         The mean facial descriptor of the person
     '''
-    
+
     def __init__(self, name, vocal_desc, facial_desc):
         '''Initializes the Person'''
-        self.name = name            
-        self.mean_vocal_descriptor = vocal_desc        
+        self.name = name
+        self.mean_vocal_descriptor = vocal_desc
         self.mean_facial_descriptor = facial_desc
 
     def __repr__(self):
@@ -41,38 +40,38 @@ class Person:
     def vocal_match(self,vocal_desc_to_be_matched, cutoff):
         """
         Returns boolean if the to_be_matched vocal descriptor matches this Person
-        
+
         Parameters:
         -----------
         vocal_desc_to_be_matched [np.array of shape (100,)]
             the vocal descriptor to be matched
-            
+
         cutoff [float]
             The cutoff value of the < operation
-        
+
         Returns:
         --------
         [boolean]
-            
+
         """
         return np.sum((self.mean_vocal_descriptor - vocal_desc_to_be_matched)**2) ** (1 / 2) < cutoff
-    
+
     def facial_match(self,facial_desc_to_be_matched,cutoff):
         """
         Returns boolean if the to_be_matched facial descriptor matches this Person
-        
+
         Parameters:
         -----------
         facial_desc_to_be_matched [np.array of shape (100,)]
             the facial descriptor to be matched
-            
+
         cutoff [float]
             The cutoff value of the < operation
-        
+
         Returns:
         --------
         [boolean]
-            
+
         """
         return np.sum((self.mean_vocal_descriptor - facial_desc_to_be_matched)**2) ** (1 / 2) < cutoff
 
@@ -90,7 +89,7 @@ class Fridge:
     """
     Fridge object for simulating a FRIDGECOP® fridge
     """
-    
+
     def __init__(self):
         """Initalizes an empty fridge"""
         print("Initialized an empty fridge")
@@ -131,11 +130,11 @@ class Fridge:
             pass
         if photo_consent:
             self.user = face_rec.run()
-                
+
     def add_item(self, item_name, manual = False):
         """
         Adds item(s) to the fridge
-        
+
         Parameters:
         -----------
         item_name : String or List[String]
@@ -159,7 +158,7 @@ class Fridge:
                     else:
                         print("FRIDGECOP does not recognize this food item")
                         return
-                
+
             if isinstance(item_name, str):
                 if item_name in self.item_names:
                     if len(self.shift_ls) == 0:  # Checks if there are no available spaces in the fridge
@@ -180,17 +179,17 @@ class Fridge:
     def take_item(self, item_name, manual = False):
         """
         Takes/removes item(s) from the fridge
-        
+
         Parameters:
         -----------
         item_name : String or List[String]
             The item name as one String or a List of Strings
-            
+
         Returns:
         --------
         None
         """
-        
+
         if isinstance(item_name, list):
             for name in item_name:
                 item_obj = None
@@ -216,16 +215,16 @@ class Fridge:
             if manual:
                 self.scanned_items.remove(item_obj)
                 self.thievery[item_obj.owner].append(f"{self.user} took your {item_obj.name}")
-            
+
 
     def close_fridge(self):
         self.new_scan = SCAN_FRIDGE() #returns list of Item objects
         #self.scanned_items
-        
+
         self.added_items = []
         self.taken_items = []
 
-        
+
         for i in self.new_scan:
             new = True
             for si in self.scanned_items:
@@ -233,7 +232,7 @@ class Fridge:
                     new = False
             if new:
                 self.added_items.append(i)
-                
+
         for si in self.scanned_items:
             taken = True
             for i in self.new_scan:
@@ -241,14 +240,14 @@ class Fridge:
                     taken = False
             if taken:
                 self.taken_items.append(si)
-        
+
         for i in self.taken_items:
             if self.user != i.owner:
                 self.thievery[i.owner].append(f"{self.user} took your {i.name}")
 
         for i in self.added_items:
             i.owner = self.user
-        
+
         self.scanned_items = self.new_scan
         self.user = None
 
@@ -275,6 +274,5 @@ def check_fridge(fridge,person):
     for i in fridge.scanned_items:
         if i.owner == person:
             person_list.append(i.name)
-            
+
     return str(person_list).strip('[]') + 'and' + str(fridge.thievery).strip('[]')
-        
