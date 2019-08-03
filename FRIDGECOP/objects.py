@@ -250,7 +250,7 @@ class Fridge:
             self.shift_ls.append((item_obj.top, item_obj.left))
             if manual:
                 self.scanned_items.remove(item_obj)
-                self.thievery[item_obj.owner].append(f"{self.user} took your {item_obj.name}")
+                self.thievery[item_obj.owner.name].append(f"{self.user.name} took your {item_obj.name}")
             
 
     def close_fridge(self):
@@ -281,7 +281,7 @@ class Fridge:
         
         for i in self.taken_items:
             if self.user != i.owner:
-                self.thievery[i.owner].append(f"{self.user.name} took your {i.name}")
+                self.thievery[i.owner.name].append(f"{self.user.name} took your {i.name}")
 
         for i in self.added_items:
             i.owner = self.user
@@ -327,15 +327,15 @@ def check_fridge(fridge, person):
     print(person_list)
 
     if person_list == [] and fridge.thievery == defaultdict(list):
-        return "Hello" + str(person.name) + ". You don't have anything in the fridge."
+        return "Hello " + str(person.name) + ". You don't have anything in the fridge."
 
     if person_list == [] and fridge.thievery != defaultdict(list):
-        return "Hello" + str(person.name) + ". You don't have anything in the fridge. " + str(fridge.thievery[person]).strip('[]')
+        return "Hello " + str(person.name) + ". You don't have anything in the fridge. " + str(fridge.thievery[person.name]).strip('[]')
 
     if fridge.thievery == defaultdict(list):
         return "Hello " + str(person.name) + ". In the fridge you have " + str(person_list).strip('[]')
     else:  
-        return "Hello " + str(person.name) + ". In the fridge you have " + str(person_list).strip('[]') + '. Also, ' + str(fridge.thievery[person]).strip('[]')
+        return "Hello " + str(person.name) + ". In the fridge you have " + str(person_list).strip('[]') + '. Also, ' + str(fridge.thievery[person.name]).strip('[]')
 
 def print_fridge(fridge):
     print([i.name for i in fridge.scanned_items])
