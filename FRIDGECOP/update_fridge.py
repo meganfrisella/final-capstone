@@ -5,10 +5,9 @@ import PIL.Image
 
 
 def remove_item(img, left, top):
-    fridge = mpimg.imread('fridge.jpg')
+    fridge = np.array(mpimg.imread('fridge.jpg'))
     for r in range(top, top+80):
-        for c in range(left, left+80):
-            img[r][c] = fridge[r][c]
+        img[r][left:left + 80] = fridge[r][left:left+80]
     return img
 
 
