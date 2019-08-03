@@ -27,9 +27,9 @@ def main():
     while True:
         user = input("Hello! Welcome to FRIDGECOP. What is your name?")
         fridge.user = user
-        j = input("Would you like to: \n 1. Generate random items (Generate) \n 2. Add an item to the fridge (Add item)\n"
-              "3. Remove an item from the fridge (Remove item)\n 4. Just display the fridge (Check fridge)")
-        if j.lower() == "generate":
+        j = input("Would you like to: \n1. Generate random items \n2. Add an item to the fridge\n"
+              "3. Remove an item from the fridge\n4. Just display the fridge\n")
+        if j == "1":
             num = input("How many items would you like to generate?")
             if type(int(num)) != int:
                 print("I'm sorry. That is not a number")
@@ -37,7 +37,7 @@ def main():
             fridge.random_fridge(int(num))
             fridge.show_fridge()
             continue
-        elif j.lower() == "add item":
+        elif j == "2":
             print(set(categories))
             print()
             cat = input("Which of these would you like to add?")
@@ -53,7 +53,7 @@ def main():
             fridge.add_item(item, manual = True)
             fridge.show_fridge()
             continue
-        elif j.lower() == 'remove item':
+        elif j == '3':
             print([i.name for i in fridge.scanned_items])
             item = input("What item would you like to remove? Keep in mind that FRIDGECOP is watching...")
             item_obj = None
@@ -77,7 +77,7 @@ def main():
             else: fridge.take_item(item, manual = True)
             fridge.show_fridge()
             continue
-        elif j.lower() == "check fridge":
+        elif j == "4":
             user_items = []
             for items in fridge.scanned_items:
                 if items.owner == fridge.user:
