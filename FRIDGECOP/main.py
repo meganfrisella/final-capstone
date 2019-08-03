@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 from update_fridge import remove_item, layer_image, propose_regions, parse_food, generate_fridge
-from objects import Fridge
+from main_objects import Fridge
 
 def parse_labels():
     with open('food_labels_raw.txt', mode="r") as var:
@@ -34,7 +34,7 @@ def main():
             if type(int(num)) != int:
                 print("I'm sorry. That is not a number")
                 continue
-            fridge.random_fridge(int(num), manual = True)
+            fridge.random_fridge1(int(num), manual = True)
             fridge.show_fridge()
             continue
         elif j == "2":
@@ -55,6 +55,9 @@ def main():
             continue
         elif j == '3':
             print([i.name for i in fridge.scanned_items])
+            if len(fridge.scanned_items) == 0:
+                print("There are no items in the firdge.")
+                continue
             item = input("What item would you like to remove? Keep in mind that FRIDGECOP is watching...")
             item_obj = None
             for fr_item in fridge.scanned_items:
