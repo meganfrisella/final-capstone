@@ -11,9 +11,8 @@ with np.load("model_parameters.npz") as file:
     weight3 = file["weight3"]
     bias3 = file["bias3"]
 
-f = open("mean_and_std.p", "rb")
-mean, std = pickle.load(f)
-f.close()
+with open("mean_and_std.p", mode="rb") as opened_file:
+    mean, std = pickle.load(opened_file)
 
 
 def run():
@@ -67,4 +66,4 @@ def find_match(emb):
         matches.append((person, similarity))
 
     matches = sorted(matches, key=lambda item: item[1])
-    return matches[-1][0]
+    return matches
