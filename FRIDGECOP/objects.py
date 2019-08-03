@@ -4,6 +4,7 @@ import matplotlib.image as mpimg
 from update_fridge import remove_item, layer_image, propose_regions, parse_food
 import math
 from collections import defaultdict
+import CompiledFridge
 
 def items_close(item1, item2):
     """
