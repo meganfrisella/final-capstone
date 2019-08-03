@@ -164,6 +164,7 @@ class Fridge:
             pass
         if photo_consent:
             self.user = fr.run()
+            print("Welcome, " + str(self.user))
                 
     def add_item(self, item_name, manual = False):
         """
