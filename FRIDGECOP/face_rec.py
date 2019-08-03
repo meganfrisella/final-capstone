@@ -85,4 +85,5 @@ def recognize_image(desc, cutoff):
         difference = np.sqrt(np.sum(np.square(mean_desc-desc)))
         if difference < cutoff:
             return person
-    return "You are not in the database"
+    print("You are not in the database")
+    return None
