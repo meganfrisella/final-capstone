@@ -164,7 +164,7 @@ class Fridge:
             pass
         if photo_consent:
             self.user = fr.run()
-            print("Welcome, " + str(self.user))
+            print("Welcome, " + str(self.user.name))
                 
     def add_item(self, item_name, manual = False):
         """
@@ -321,10 +321,10 @@ def check_fridge(fridge,person):
             person_list.append(i.name)
     
 
-    if person_list == [] and fridge.thievery != defaultdict(list):
+    if person_list == [] and fridge.thievery == defaultdict(list):
         return "Hello" + str(person.name) + ". You don't have anything in the fridge."
 
-    if person_list == [] and fridge.thievery == defaultdict(list):
+    if person_list == [] and fridge.thievery != defaultdict(list):
         return "Hello" + str(person.name) + ". You don't have anything in the fridge, but " + str(fridge.thievery[person]).strip('[]')
 
     if fridge.thievery == defaultdict(list):
