@@ -2,9 +2,13 @@ import numpy as np
 from microphone import record_audio
 import pickle
 
-f = open("model2.p", "rb")
-model = pickle.load(f)
-f.close()
+with np.load("model_parameters.npz") as file:
+    weight1 = file["weight1"]
+    bias1 = file["bias1"]
+    weight2 = file["weight2"]
+    bias2 = file["bias2"]
+    weight3 = file["weight3"]
+    bias3 = file["bias3"]
 
 f = open("mean_and_std.p", "rb")
 mean, std = pickle.load(f)
@@ -46,6 +50,8 @@ def get_embedding(sample):
     dft = np.abs(np.fft.rfft(sample))
     dft -= mean
     dft /= std
+    model = autoencoder.Autoencoder(88201, 100)
+    model.load_parameters(weight1, bias1, weight2, bias2, weight3, bias3)
     return model(dft).data
 
 
