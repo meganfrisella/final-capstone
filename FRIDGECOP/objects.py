@@ -308,7 +308,7 @@ def check_fridge(fridge,person):
     for i in fridge.scanned_items:
         if i.owner == person:
             person_list.append(i.name)
-    if fridge.thievery == defaultdict(<class 'list'>, {}):
+    if fridge.thievery == defaultdict(list):
         return "You have " + str(person_list).strip('[]')  
     else:  
         return "You have " + str(person_list).strip('[]') + '. Also, ' + str(fridge.thievery[person]).strip('[]')
