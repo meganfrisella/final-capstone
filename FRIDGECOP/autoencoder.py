@@ -8,7 +8,7 @@ class Autoencoder:
         """
         Initializes the layers in the model.
 
-        Parametersv
+        Parameters
         ----------
         d_desc : int
             dimension of the descriptor vector.
@@ -16,9 +16,9 @@ class Autoencoder:
         d_embed : int
             dimension of the embedding
         """
-        self.dense1 = dense(d_data, 1000, weight_initializer=normal)
-        self.dense2 = dense(1000, 500, weight_initializer=normal)
-        self.dense3 = dense(500, d_embed, weight_initializer=normal)
+        self.dense1 = dense(d_data, 1500, weight_initializer=normal)
+        self.dense2 = dense(1500, 750, weight_initializer=normal)
+        self.dense3 = dense(750, d_embed, weight_initializer=normal)
 
     def __call__(self, x):
         """
@@ -48,3 +48,8 @@ class Autoencoder:
             tuple containing of learnable parameters
         """
         return self.dense1.parameters + self.dense2.parameters + self.dense3.parameters
+
+    def load_parameters(self, weight1, bias1, weight2, bias2, weight3, bias3):
+        self.dense1 = lambda x: x @ weight1 + bias1
+        self.dense2 = lambda x: x @ weight2 + bias2
+        self.dense3 = lambda x: x @ weight3 + bias3

@@ -4,6 +4,43 @@ import matplotlib.image as mpimg
 from update_fridge import remove_item, layer_image, propose_regions, parse_food
 import math
 from collections import defaultdict
+import face_rec as fr
+import voice_rec
+import use_scanned_fridge as usf
+import pickle
+
+from torch import nn
+import torch.nn.functional as F
+
+from detection_utils.boxes import non_max_suppression, generate_targets
+from detection_utils.metrics import compute_recall, compute_precision
+from detection_utils.pytorch import softmax_focal_loss
+from mynn.layers.conv import conv
+from mynn.layers.dense import dense
+from mynn.layers.dropout import dropout
+from mynn.activations.relu import relu
+from mynn.initializers.glorot_uniform import glorot_uniform
+from mygrad.nnet.layers import max_pool
+from mygrad.nnet.losses import softmax_crossentropy
+from mygrad.nnet.layers import conv_nd
+from mynn.losses.cross_entropy import softmax_cross_entropy
+from mynn.optimizers.adam import Adam
+
+from import_tests import Model
+from import_tests import ClassifyingModel
+
+from use_scanned_fridge import Item
+
+#CUT AND PATE [1] START
+
+
+
+
+print(Model)
+with open('model7.p','rb') as f:
+    USF_model = pickle.load(f)
+with open("classifying_model2.p", "rb") as f:
+    classifying_model = pickle.load(f)
 
 def items_close(item1, item2):
     """
@@ -76,13 +113,7 @@ class Person:
         return np.sum((self.mean_vocal_descriptor - facial_desc_to_be_matched)**2) ** (1 / 2) < cutoff
 
 
-class Item:
-    def __init__(self, left, top, name, category, owner):
-        self.left = left
-        self.top = top
-        self.name = name
-        self.category = category
-        self.owner = owner
+
 
 
 class Fridge:
@@ -109,6 +140,10 @@ class Fridge:
         self.images, self.roi_images, self.item_names, self.categories = parse_food()
 
     def random_fridge(self, num_items, manual = False):
+        with open("fridge.p",'wb') as f:
+            pickle.dump(self,f)
+
+    def random_fridge1(self, num_items, manual = False):
         for i in range(num_items):
             rand_ind = np.random.randint(0, len(self.images))
             self.add_item(self.item_names[rand_ind], manual = manual)
@@ -129,7 +164,8 @@ class Fridge:
             self.user = None
             pass
         if photo_consent:
-            self.user = face_rec.run()
+            self.user = fr.run()
+            print("Welcome, " + str(self.user.name))
                 
     def add_item(self, item_name, manual = False):
         """
@@ -218,19 +254,20 @@ class Fridge:
             
 
     def close_fridge(self):
-        self.new_scan = SCAN_FRIDGE() #returns list of Item objects
-        #self.scanned_items
+        self.new_scan = usf.scan_fridge(self.fridge,USF_model,classifying_model) #returns list of Item objects
+        print('new scanned items:')
+        print([i.name for i in self.new_scan])
         
         self.added_items = []
         self.taken_items = []
 
-        
         for i in self.new_scan:
             new = True
             for si in self.scanned_items:
                 if items_close(i, si): #!!!!!!!!:
                     new = False
             if new:
+                print(i.name)
                 self.added_items.append(i)
                 
         for si in self.scanned_items:
@@ -238,18 +275,23 @@ class Fridge:
             for i in self.new_scan:
                 if items_close(i, si):
                     taken = False
+                    i.owner = si.owner
             if taken:
                 self.taken_items.append(si)
         
         for i in self.taken_items:
             if self.user != i.owner:
-                self.thievery[i.owner].append(f"{self.user} took your {i.name}")
+                self.thievery[i.owner].append(f"{self.user.name} took your {i.name}")
 
         for i in self.added_items:
             i.owner = self.user
         
         self.scanned_items = self.new_scan
+
         self.user = None
+
+        with open("fridge.p",'wb') as f:
+            pickle.dump(self,f)
 
 
 def check_fridge(fridge,person):
@@ -271,9 +313,27 @@ def check_fridge(fridge,person):
         "You have {x}, {y}, {z} in your fridge, and {person} stole {w}
     """
     person_list = []
+
+    if fridge.scanned_items == []:
+        return "Hello" + str(person.name) + ". There is nothing in the fridge"
+
     for i in fridge.scanned_items:
         if i.owner == person:
             person_list.append(i.name)
-            
-    return str(person_list).strip('[]') + 'and' + str(fridge.thievery).strip('[]')
+    
+
+    if person_list == [] and fridge.thievery == defaultdict(list):
+        return "Hello" + str(person.name) + ". You don't have anything in the fridge."
+
+    if person_list == [] and fridge.thievery != defaultdict(list):
+        return "Hello" + str(person.name) + ". You don't have anything in the fridge, but " + str(fridge.thievery[person]).strip('[]')
+
+    if fridge.thievery == defaultdict(list):
+        return "Hello" + str(person.name) + ". In the fridge you have " + str(person_list).strip('[]')  
+    else:  
+        return "Hello" + str(person.name) + ". In the fridge you have " + str(person_list).strip('[]') + '. Also, ' + str(fridge.thievery[person]).strip('[]')
+
+def print_fridge(fridge):
+    print([i.name for i in fridge.scanned_items])
+    print([i.owner for i in fridge.scanned_items])
         

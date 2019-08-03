@@ -29,7 +29,7 @@ def run():
     """
     image = take_picture()
     descriptors = image_to_descriptors(image)
-    return recognize_image(descriptors[0])
+    return recognize_image(descriptors[0], 0.4)
 
 
 def image_to_descriptors(image):
@@ -63,7 +63,7 @@ def image_to_descriptors(image):
     return descriptors
 
 
-def recognize_image(desc):
+def recognize_image(desc, cutoff):
     """
 
 
@@ -77,15 +77,13 @@ def recognize_image(desc):
 
     """
 
-    f = open("people.p", "rb")
-    people = pickle.load(f)
-    f.close()
+    with open("people.p", mode="rb") as opened_file:
+        people = pickle.load(opened_file)
 
-    diffs = []
     for person in people:
         mean_desc = person.mean_facial_descriptor
         difference = np.sqrt(np.sum(np.square(mean_desc-desc)))
-        diffs.append((difference, person))
-
-    diffs = sorted(diffs)
-    return diffs[0][1]
+        if difference < cutoff:
+            return person
+    print("You are not in the database")
+    return None
