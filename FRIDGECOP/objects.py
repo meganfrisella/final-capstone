@@ -140,7 +140,7 @@ class Fridge:
         self.images, self.roi_images, self.item_names, self.categories = parse_food()
 
         with open("fridge.p",'wb') as f:
-            pickle.dump(self)
+            pickle.dump(self,f)
 
     def random_fridge(self, num_items):
         for i in range(num_items):
@@ -289,7 +289,7 @@ class Fridge:
         self.user = None
 
         with open("fridge.p",'wb') as f:
-            pickle.dump(self)
+            pickle.dump(self,f)
 
 
 def check_fridge(fridge,person):
