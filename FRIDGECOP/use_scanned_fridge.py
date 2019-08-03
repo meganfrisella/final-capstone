@@ -32,10 +32,17 @@ from mygrad import Tensor
 
 from noggin import create_plot
 import matplotlib.pyplot as plt
-import objects as ob
 
 with open("indiv_labels.txt", mode = "r") as var:
         labels = var.read().splitlines()
+
+class Item:
+    def __init__(self,left,top,name,category,owner):
+        self.left = left
+        self.top = top
+        self.name = name
+        self.category = category
+        self.owner
 
 def compute_detections(classifications, regressions, feature_map_width, anchor_box_step, anchor_box_size):
     """ Compute a set of boxes, class predictions, and foreground scores from
