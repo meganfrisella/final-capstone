@@ -202,11 +202,10 @@ class ClassifyingModel():
         return self.conv1.parameters + self.conv2.parameters + self.dense3.parameters
 
     #last known mean and std values: 200.62128, 42.149155 respectively
-def scan_fridge(fridge_image, training_mean, training_std):
+def scan_fridge(fridge_image, model, classifying_model):
+    training_mean = 200.62128
+    training_std = 42.149155
     device = 'cuda:1' if torch.cuda.is_available() else 'cpu'
-    f = open("model7.p","rb")
-    model = pickle.load(f)
-    f.close()
     img = np.copy(fridge_image).astype(np.float32)
     img-=training_mean
     img/= training_std
@@ -252,8 +251,6 @@ def scan_fridge(fridge_image, training_mean, training_std):
     if len(food_images)==0:
         return []
     #print(food_images.shape, food_images)
-    with open("classifying_model2.p", "rb") as f:
-        classifying_model = pickle.load(f)
     classes = classifying_model(food_images)
     
     #print(classes.shape)
