@@ -2,9 +2,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 from update_fridge import remove_item, layer_image, propose_regions, parse_food
+import face_rec
 import math
 from collections import defaultdict
-import CompiledFridge
+# import CompiledFridge
 
 def items_close(item1, item2):
     """
@@ -125,12 +126,10 @@ class Fridge:
         """
         photo = input("I'm going to take a photo of your face. Is that ok? [y/n]")
         if photo == 'y':
-            photo_consent = True
+            self.user = face_rec.run()
         else:
             self.user = None
             pass
-        if photo_consent:
-            self.user = face_rec.run()
                 
     def add_item(self, item_name, manual = False):
         """
