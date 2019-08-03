@@ -42,7 +42,7 @@ class Item:
         self.top = top
         self.name = name
         self.category = category
-        self.owner
+        self.owner = owner
 
 def compute_detections(classifications, regressions, feature_map_width, anchor_box_step, anchor_box_size):
     """ Compute a set of boxes, class predictions, and foreground scores from
