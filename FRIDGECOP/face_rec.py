@@ -29,7 +29,7 @@ def run():
     """
     image = take_picture()
     descriptors = image_to_descriptors(image)
-    return recognize_image(descriptors[0], 0.35)
+    return recognize_image(descriptors[0], 0.4)
 
 
 def image_to_descriptors(image):
