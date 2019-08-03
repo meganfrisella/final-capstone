@@ -307,7 +307,7 @@ def check_fridge(fridge,person):
     person_list = []
 
     if fridge.scanned_items == []:
-        return "There is nothing in the fridge"
+        return "Hello" + str(person.name) + "There is nothing in the fridge"
 
     for i in fridge.scanned_items:
         if i.owner == person:
