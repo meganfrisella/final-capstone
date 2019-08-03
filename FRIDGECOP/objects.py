@@ -305,13 +305,25 @@ def check_fridge(fridge,person):
         "You have {x}, {y}, {z} in your fridge, and {person} stole {w}
     """
     person_list = []
+
+    if fridge.scanned_items = []:
+        return "There is nothing in the fridge"
+
     for i in fridge.scanned_items:
         if i.owner == person:
             person_list.append(i.name)
+    
+
+    if person_list = [] and fridge.thievery != defaultdict(list):
+        return "Hello" + str(person.name) + ". You don't have anything in your fridge."
+
+    if person_list = [] and fridge.thievery == defaultdict(list):
+        return "Hello" + str(person.name) + ". You don't have anything in your fridge, but " + str(fridge.thievery[person]).strip('[]')
+
     if fridge.thievery == defaultdict(list):
-        return "You have " + str(person_list).strip('[]')  
+        return "Hello" + str(person.name) + ". In your fridge you have " + str(person_list).strip('[]')  
     else:  
-        return "You have " + str(person_list).strip('[]') + '. Also, ' + str(fridge.thievery[person]).strip('[]')
+        return "Hello" + str(person.name) + ". In your fridge you have " + str(person_list).strip('[]') + '. Also, ' + str(fridge.thievery[person]).strip('[]')
 
 def print_fridge(fridge):
     print([i.name for i in fridge.scanned_items])
