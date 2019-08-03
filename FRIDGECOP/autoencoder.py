@@ -50,6 +50,6 @@ class Autoencoder:
         return self.dense1.parameters + self.dense2.parameters + self.dense3.parameters
 
     def load_parameters(self, weight1, bias1, weight2, bias2, weight3, bias3):
-        self.dense1 = lambda x: weight1 @ x + bias1
-        self.dense2 = lambda x: weight2 @ x + bias2
-        self.dense3 = lambda x: weight3 @ x + bias3
+        self.dense1 = lambda x: x @ weight1 + bias1
+        self.dense2 = lambda x: x @ weight2 + bias2
+        self.dense3 = lambda x: x @ weight3 + bias3

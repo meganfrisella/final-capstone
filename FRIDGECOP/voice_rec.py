@@ -1,6 +1,7 @@
 import numpy as np
 from microphone import record_audio
 import pickle
+import autoencoder
 
 with np.load("model_parameters.npz") as file:
     weight1 = file["weight1"]
@@ -56,9 +57,8 @@ def get_embedding(sample):
 
 
 def find_match(emb):
-    f = open("people.p", "rb")
-    people = pickle.load(f)
-    f.close()
+    with open("people.p", mode="rb") as opened_file:
+        people = pickle.load(opened_file)
 
     matches = []
     for person in people:

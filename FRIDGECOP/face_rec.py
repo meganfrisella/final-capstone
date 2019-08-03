@@ -77,9 +77,8 @@ def recognize_image(desc):
 
     """
 
-    f = open("people.p", "rb")
-    people = pickle.load(f)
-    f.close()
+    with open("people.p", mode="rb") as opened_file:
+        people = pickle.load(opened_file)
 
     diffs = []
     for person in people:
