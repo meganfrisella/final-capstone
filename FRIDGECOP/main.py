@@ -34,7 +34,7 @@ def main():
             if type(int(num)) != int:
                 print("I'm sorry. That is not a number")
                 continue
-            fridge.random_fridge(int(num))
+            fridge.random_fridge(int(num), manual = True)
             fridge.show_fridge()
             continue
         elif j == "2":

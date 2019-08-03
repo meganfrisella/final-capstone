@@ -4,7 +4,6 @@ import matplotlib.image as mpimg
 from update_fridge import remove_item, layer_image, propose_regions, parse_food
 import math
 from collections import defaultdict
-import CompiledFridge
 
 def items_close(item1, item2):
     """
@@ -109,10 +108,10 @@ class Fridge:
 
         self.images, self.roi_images, self.item_names, self.categories = parse_food()
 
-    def random_fridge(self, num_items):
+    def random_fridge(self, num_items, manual = False):
         for i in range(num_items):
             rand_ind = np.random.randint(0, len(self.images))
-            self.add_item(self.item_names[rand_ind], manual = True)
+            self.add_item(self.item_names[rand_ind], manual = manual)
 
 
     def show_fridge(self):
