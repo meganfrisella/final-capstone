@@ -260,5 +260,5 @@ def scan_fridge(fridge_image, model, classifying_model):
     
     #return food_images, [(food_coords[i][0], food_coords[i][1], labels[np.argmax(classes[i].flatten())], "food") for i in range(len(classes))]
     #Check this: CHANGE back to this LATER
-    return [Item(food_coords[i][0], food_coords[i][1], labels[np.argmax(classes[i].flatten())], "food")for i in range(len(classes))]
+    return [Item(food_coords[i][0], food_coords[i][1], labels[np.argmax(classes[i].flatten())], "food",None)for i in range(len(classes))]
     
