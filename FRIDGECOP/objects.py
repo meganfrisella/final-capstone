@@ -3,8 +3,6 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 from update_fridge import remove_item, layer_image, propose_regions, parse_food
 import math
-import face_rec
-import voice_rec
 from collections import defaultdict
 
 def items_close(item1, item2):
@@ -110,6 +108,12 @@ class Fridge:
 
         self.images, self.roi_images, self.item_names, self.categories = parse_food()
 
+    def random_fridge(self, num_items):
+        for i in range(num_items):
+            rand_ind = np.random.randint(0, len(self.images))
+            self.add_item(self.item_names[rand_ind], manual = True)
+
+
     def show_fridge(self):
         plt.imshow(self.fridge)
         plt.show()
@@ -127,7 +131,7 @@ class Fridge:
         if photo_consent:
             self.user = face_rec.run()
                 
-    def add_item(self, item_name):
+    def add_item(self, item_name, manual = False):
         """
         Adds item(s) to the fridge
         
@@ -156,7 +160,6 @@ class Fridge:
                         return
                 
             if isinstance(item_name, str):
-                print("in1")
                 if item_name in self.item_names:
                     if len(self.shift_ls) == 0:  # Checks if there are no available spaces in the fridge
                         print("FRIDGECOP says the fridge is full")
@@ -164,14 +167,16 @@ class Fridge:
                     position = self.shift_ls.pop(np.random.randint(len(self.shift_ls)))
                     image = self.images[self.item_names.index(item_name)]
                     self.fridge = layer_image(self.fridge, propose_regions(image), image, position)
-                    print("in")
+                    if manual:
+                        cat = self.categories[self.item_names.index(item_name)]
+                        self.scanned_items.append(Item(position[1], position[0], item_name, cat, self.user))
                 else:
                     print("FRIDGECOP does not recognize this food item")
 
         if self.user is None:
             print("the fridge isn't open")
 
-    def take_item(self, item_name):
+    def take_item(self, item_name, manual = False):
         """
         Takes/removes item(s) from the fridge
         
@@ -194,9 +199,8 @@ class Fridge:
                 if item_obj is None:
                     print("FRIDGECOP does not recognize that food item")
                     return
-                image = self.images[self.item_names.index(name)]
-                self.fridge = remove_item(image, item_obj.left, item_obj.top)
-                self.shift_ls.remove((item_obj.top, item_obj.left))
+                self.fridge = remove_item(self.fridge, item_obj.left, item_obj.top)
+                self.shift_ls.append((item_obj.top, item_obj.left))
         if isinstance(item_name, str):
             name = item_name
             item_obj = None
@@ -206,9 +210,11 @@ class Fridge:
             if item_obj is None:
                 print("FRIDGECOP does not recognize that food item")
                 return
-            image = self.images[self.item_names.index(name)]
-            self.fridge = remove_item(image, item_obj.left, item_obj.top)
-            self.shift_ls.remove((item_obj.top, item_obj.left))
+            self.fridge = remove_item(self.fridge, item_obj.left, item_obj.top)
+            self.shift_ls.append((item_obj.top, item_obj.left))
+            if manual:
+                self.scanned_items.remove(item_obj)
+                self.thievery[item_obj.owner].append(f"{self.user} took your {item_obj.name}")
             
 
     def close_fridge(self):
