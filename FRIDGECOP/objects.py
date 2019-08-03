@@ -139,6 +139,9 @@ class Fridge:
 
         self.images, self.roi_images, self.item_names, self.categories = parse_food()
 
+        with open("fridge.p",'wb') as f:
+            pickle.dump(self)
+
     def random_fridge(self, num_items):
         for i in range(num_items):
             rand_ind = np.random.randint(0, len(self.images))
@@ -284,6 +287,9 @@ class Fridge:
         self.scanned_items = self.new_scan
 
         self.user = None
+
+        with open("fridge.p",'wb') as f:
+            pickle.dump(self)
 
 
 def check_fridge(fridge,person):
