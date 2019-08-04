@@ -340,4 +340,5 @@ def check_fridge(fridge, person):
 def print_fridge(fridge):
     print([i.name for i in fridge.scanned_items])
     print([i.owner for i in fridge.scanned_items])
+    print(fridge.thievery)
         
