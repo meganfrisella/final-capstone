@@ -2,6 +2,8 @@ from tkinter import *
 from import_tests import Model
 from import_tests import ClassifyingModel
 import objects as ob
+import tkinter as tk
+from PIL import Image, ImageTk
 
 class Window(Frame):
 
@@ -38,7 +40,13 @@ class Window(Frame):
         # placing the button on my window
         resetButton.place(x=400, y=10)
         openFridgeButton.place(x=50,y=50)
-        
+
+        image = Image.open("fridgecop.png")
+        photo = ImageTk.PhotoImage(image,master=root)
+        label = tk.Label(root, image=photo)
+        label.image = photo
+        label.place(x = 300,y=25)
+                
         
         #addItemButton.place(x=50,y=100)
         #takeItemButton.place(x=50,y=150)
